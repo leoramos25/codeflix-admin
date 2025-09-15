@@ -1,0 +1,6 @@
+@Codeflix.Catalog.Api_HostAddress = http://localhost:5208
+
+GET {{Codeflix.Catalog.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -26,7 +26,7 @@ public class ListCategoriesTestFixture : CategoryUseCaseBaseFixture
             ("createdat", SearchOrder.Desc) => listClone.OrderByDescending(x => x.CreatedAt),
             _ => listClone.OrderBy(x => x.Name),
         };
-        return orderedEnumerable.ToList();
+        return orderedEnumerable.ThenBy(x => x.Id).ToList();
     }
 
     public List<Domain.Entity.Category> GetValidCategoriesWithNames(List<string> categoryNames) =>

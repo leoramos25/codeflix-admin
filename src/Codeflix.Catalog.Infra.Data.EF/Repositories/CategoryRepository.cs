@@ -48,15 +48,18 @@ public class CategoryRepository(CodeflixCatalogDbContext context) : ICategoryRep
         IQueryable<Category> query,
         string orderProperty,
         SearchOrder order
-    ) =>
-        (orderProperty.ToLower(), order) switch
+    )
+    {
+        var orderedQuery = (orderProperty.ToLower(), order) switch
         {
             ("name", SearchOrder.Asc) => query.OrderBy(x => x.Name),
             ("name", SearchOrder.Desc) => query.OrderByDescending(x => x.Name),
-            ("id", SearchOrder.Asc) => query.OrderBy(x => x.Id),
+            ("id", SearchOrder.Asc) => query.OrderBy(x => x.Id).ThenBy(x => x.Id),
             ("id", SearchOrder.Desc) => query.OrderByDescending(x => x.Id),
             ("createdat", SearchOrder.Asc) => query.OrderBy(x => x.CreatedAt),
             ("createdat", SearchOrder.Desc) => query.OrderByDescending(x => x.CreatedAt),
-            _ => query,
+            _ => query.OrderBy(x => x.Name),
         };
+        return orderedQuery.ThenBy(x => x.Id);
+    }
 }

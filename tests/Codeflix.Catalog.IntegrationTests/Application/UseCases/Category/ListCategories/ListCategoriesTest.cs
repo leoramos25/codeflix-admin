@@ -150,7 +150,7 @@ public class ListCategoriesTest(ListCategoriesTestFixture fixture)
         }
     }
 
-    [Theory(DisplayName = nameof(SearchByText))]
+    [Theory(DisplayName = nameof(SearchOrdered))]
     [Trait("Integration/Application", "ListCategories - Use Cases")]
     [InlineData("name", "asc")]
     [InlineData("name", "desc")]

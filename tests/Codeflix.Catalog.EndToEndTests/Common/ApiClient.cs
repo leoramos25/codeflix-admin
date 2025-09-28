@@ -1,5 +1,9 @@
 using System.Net.Http.Json;
 using System.Text.Json;
+using System.Web;
+using Microsoft.AspNetCore.WebUtilities;
+using Newtonsoft.Json;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Codeflix.Catalog.EndToEndTests.Common;
 
@@ -19,11 +23,13 @@ public class ApiClient(HttpClient httpClient)
 
     public async Task<(HttpResponseMessage, TOutput?)> Get<TOutput>(
         string url,
-        CancellationToken cancellationToken
+        CancellationToken cancellationToken,
+        object? query = null
     )
         where TOutput : class
     {
-        var response = await httpClient.GetAsync(url, cancellationToken);
+        var route = PrepareGetRoute(url, query);
+        var response = await httpClient.GetAsync(route, cancellationToken);
         var output = await GetOutput<TOutput>(response, cancellationToken);
         return (response, output);
     }
@@ -65,5 +71,16 @@ public class ApiClient(HttpClient httpClient)
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
             );
         return output;
+    }
+
+    private string PrepareGetRoute(string route, object? queryParams)
+    {
+        if (queryParams is null)
+            return route;
+        var parameters = JsonSerializer.Serialize(queryParams);
+        var dictionaryParams = JsonConvert.DeserializeObject<Dictionary<string, string>>(
+            parameters
+        );
+        return QueryHelpers.AddQueryString(route, dictionaryParams!);
     }
 }

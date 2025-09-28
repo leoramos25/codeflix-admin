@@ -1,7 +1,9 @@
 using Codeflix.Catalog.Application.UseCases.Category.Create;
 using Codeflix.Catalog.Application.UseCases.Category.Delete;
 using Codeflix.Catalog.Application.UseCases.Category.Get;
+using Codeflix.Catalog.Application.UseCases.Category.List;
 using Codeflix.Catalog.Application.UseCases.Category.Update;
+using Codeflix.Catalog.Domain.SeedWork.SearchableRepository;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -55,6 +57,32 @@ public class CategoriesController(IMediator mediator) : ControllerBase
         CancellationToken cancellationToken
     )
     {
+        var output = await mediator.Send(input, cancellationToken);
+        return Ok(output);
+    }
+
+    [HttpGet]
+    [ProducesResponseType(typeof(ListCategoriesOutput), StatusCodes.Status200OK)]
+    public async Task<IActionResult> List(
+        CancellationToken cancellationToken,
+        [FromQuery] int? page = null,
+        [FromQuery] int? perPage = null,
+        [FromQuery] string? search = null,
+        [FromQuery] string? sort = null,
+        [FromQuery] SearchOrder? dir = null
+    )
+    {
+        var input = new ListCategoriesInput();
+        if (page is not null)
+            input.Page = page.Value;
+        if (perPage is not null)
+            input.PerPage = perPage.Value;
+        if (!string.IsNullOrWhiteSpace(search))
+            input.Search = search;
+        if (!string.IsNullOrWhiteSpace(sort))
+            input.Sort = sort;
+        if (dir is not null)
+            input.Dir = dir.Value;
         var output = await mediator.Send(input, cancellationToken);
         return Ok(output);
     }

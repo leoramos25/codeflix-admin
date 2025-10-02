@@ -1,0 +1,26 @@
+﻿services:
+#  codeflix.catalog.api:
+#    image: codeflix.catalog.api
+#    build:
+#      context: .
+#      dockerfile: src/Codeflix.Catalog.Api/Dockerfile
+      
+  database:
+    container_name: catalogdb
+    hostname: catalogdb
+    image: mysql:8.0.28-debian
+    ports:
+      - '3306:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: C0D3fl1X.@
+      MYSQL_DATABASE: CatalogAdmin
+      
+  database-e2e:
+    container_name: catalogdb-e2e
+    hostname: catalogdb-e2e
+    image: mysql:8.0.28-debian
+    ports:
+      - '33060:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: C0D3fl1X.@
+      MYSQL_DATABASE: CatalogAdmin

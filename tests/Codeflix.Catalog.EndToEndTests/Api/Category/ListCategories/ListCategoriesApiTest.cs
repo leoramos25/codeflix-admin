@@ -241,5 +241,5 @@ public class ListCategoriesApiTest(ListCategoriesApiTestFixture fixture) : IDisp
         }
     }
 
-    public void Dispose() => fixture.CreateDbContext();
+    public void Dispose() => fixture.CleanPersistence();
 }

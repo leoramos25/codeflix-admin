@@ -1,7 +1,0 @@
-﻿services:
-  codeflix.catalog.api:
-    image: codeflix.catalog.api
-    build:
-      context: .
-      dockerfile: src/Codeflix.Catalog.Api/Dockerfile
-

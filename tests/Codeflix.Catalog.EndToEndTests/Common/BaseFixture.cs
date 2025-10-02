@@ -1,6 +1,7 @@
 using Bogus;
 using Codeflix.Catalog.Infra.Data.EF;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace Codeflix.Catalog.EndToEndTests.Common;
 
@@ -10,6 +11,7 @@ public abstract class BaseFixture
     public CustomWebApplicationFactory<Program> WebApplicationFactory { get; set; }
     public HttpClient HttpClient { get; set; }
     public ApiClient ApiClient { get; set; }
+    private readonly string _connectionString;
 
     protected BaseFixture()
     {
@@ -17,17 +19,27 @@ public abstract class BaseFixture
         WebApplicationFactory = new CustomWebApplicationFactory<Program>();
         HttpClient = WebApplicationFactory.CreateClient();
         ApiClient = new ApiClient(HttpClient);
+        var configuration = WebApplicationFactory.Services.GetService(typeof(IConfiguration));
+        ArgumentNullException.ThrowIfNull(configuration);
+        _connectionString =
+            ((IConfiguration)configuration).GetConnectionString("CatalogDb")
+            ?? throw new InvalidOperationException();
     }
 
-    public CodeflixCatalogDbContext CreateDbContext(bool preserveData = false)
+    public CodeflixCatalogDbContext CreateDbContext()
     {
         var context = new CodeflixCatalogDbContext(
             new DbContextOptionsBuilder<CodeflixCatalogDbContext>()
-                .UseInMemoryDatabase("e2e-tests-db")
+                .UseMySql(_connectionString, ServerVersion.AutoDetect(_connectionString))
                 .Options
         );
-        if (!preserveData)
-            context.Database.EnsureDeleted();
         return context;
+    }
+
+    public void CleanPersistence()
+    {
+        var context = CreateDbContext();
+        context.Database.EnsureDeleted();
+        context.Database.EnsureCreated();
     }
 }

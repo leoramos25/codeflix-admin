@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Codeflix.Catalog.EndToEndTests.Api.Category.UpdateCategory;
 
 [Collection(nameof(UpdateCategoryApiTestFixture))]
-public class UpdateCategoryApiTest(UpdateCategoryApiTestFixture fixture)
+public class UpdateCategoryApiTest(UpdateCategoryApiTestFixture fixture) : IDisposable
 {
     [Fact(DisplayName = nameof(Update))]
     [Trait("EndToEnd/Api", "UpdateCategory - Endpoints")]
@@ -31,7 +31,7 @@ public class UpdateCategoryApiTest(UpdateCategoryApiTestFixture fixture)
         output.IsActive.Should().Be(input.IsActive!.Value);
         output.CreatedAt.Should().BeSameDateAs(category.CreatedAt);
 
-        var dbContext = fixture.CreateDbContext(true);
+        var dbContext = fixture.CreateDbContext();
         var dbCategory = await dbContext.Categories.FindAsync(category.Id, CancellationToken.None);
 
         dbCategory.Should().NotBeNull();
@@ -64,7 +64,7 @@ public class UpdateCategoryApiTest(UpdateCategoryApiTestFixture fixture)
         output.IsActive.Should().Be(category.IsActive);
         output.CreatedAt.Should().BeSameDateAs(category.CreatedAt);
 
-        var dbContext = fixture.CreateDbContext(true);
+        var dbContext = fixture.CreateDbContext();
         var dbCategory = await dbContext.Categories.FindAsync(category.Id, CancellationToken.None);
 
         dbCategory.Should().NotBeNull();
@@ -102,7 +102,7 @@ public class UpdateCategoryApiTest(UpdateCategoryApiTestFixture fixture)
         output.IsActive.Should().Be(category.IsActive);
         output.CreatedAt.Should().BeSameDateAs(category.CreatedAt);
 
-        var dbContext = fixture.CreateDbContext(true);
+        var dbContext = fixture.CreateDbContext();
         var dbCategory = await dbContext.Categories.FindAsync(category.Id, CancellationToken.None);
 
         dbCategory.Should().NotBeNull();
@@ -165,4 +165,6 @@ public class UpdateCategoryApiTest(UpdateCategoryApiTestFixture fixture)
         output.Type.Should().Be("UnprocessableEntity");
         output.Detail.Should().Be(errorMessage);
     }
+
+    public void Dispose() => fixture.CleanPersistence();
 }

@@ -1,9 +1,17 @@
 ﻿services:
-#  codeflix.catalog.api:
-#    image: codeflix.catalog.api
-#    build:
-#      context: .
-#      dockerfile: src/Codeflix.Catalog.Api/Dockerfile
+  codeflix.catalog.api:
+    image: codeflix.catalog.api
+    environment:
+      ASPNETCORE_URLS: http://+:80;
+      ASPNETCORE_ENVIRONMENT: Docker
+    build:
+      context: .
+      dockerfile: src/Codeflix.Catalog.Api/Dockerfile
+    ports:
+      - '5000:80'
+    depends_on:
+      - database
+      - database-e2e
       
   database:
     container_name: catalogdb
@@ -24,3 +32,8 @@
     environment:
       MYSQL_ROOT_PASSWORD: C0D3fl1X.@
       MYSQL_DATABASE: CatalogAdmin
+      
+networks:
+  default:
+    name: catalog-admin
+    external: true

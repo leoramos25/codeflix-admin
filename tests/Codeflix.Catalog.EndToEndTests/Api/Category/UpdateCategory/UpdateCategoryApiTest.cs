@@ -1,4 +1,5 @@
 using System.Net;
+using Codeflix.Catalog.Api.ApiModels.Category;
 using Codeflix.Catalog.Application.UseCases.Category.Update;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +15,7 @@ public class UpdateCategoryApiTest(UpdateCategoryApiTestFixture fixture) : IDisp
     {
         var category = fixture.GetValidCategory();
         await fixture.Persistence.InsertList([category], CancellationToken.None);
-        var input = fixture.GetValidInput(category.Id);
+        var input = fixture.GetValidInput();
 
         var (response, output) = await fixture.ApiClient.Put<UpdateCategoryOutput>(
             $"/categories/{category.Id}",
@@ -81,8 +82,7 @@ public class UpdateCategoryApiTest(UpdateCategoryApiTestFixture fixture) : IDisp
     {
         var category = fixture.GetValidCategory();
         await fixture.Persistence.InsertList([category], CancellationToken.None);
-        var input = new UpdateCategoryInput(
-            category.Id,
+        var input = new UpdateCategoryApiInput(
             fixture.GetValidCategoryName(),
             fixture.GetValidCategoryDescription()
         );
@@ -118,7 +118,7 @@ public class UpdateCategoryApiTest(UpdateCategoryApiTestFixture fixture) : IDisp
     public async Task ThrowWhenCategoryNotFound()
     {
         var invalidId = Guid.NewGuid();
-        var input = fixture.GetValidInput(invalidId);
+        var input = fixture.GetValidInput();
 
         var (response, output) = await fixture.ApiClient.Put<ProblemDetails>(
             $"/categories/{invalidId}",
@@ -143,16 +143,15 @@ public class UpdateCategoryApiTest(UpdateCategoryApiTestFixture fixture) : IDisp
         MemberType = typeof(UpdateCategoryApiTestDataGenerator)
     )]
     public async Task ThrowErrorWhenCantInstantiateCategory(
-        UpdateCategoryInput input,
+        UpdateCategoryApiInput input,
         string errorMessage
     )
     {
         var category = fixture.GetValidCategory();
-        input.Id = category.Id;
         await fixture.Persistence.InsertList([category], CancellationToken.None);
 
         var (response, output) = await fixture.ApiClient.Put<ProblemDetails>(
-            $"/categories/{input.Id}",
+            $"/categories/{category.Id}",
             input,
             CancellationToken.None
         );

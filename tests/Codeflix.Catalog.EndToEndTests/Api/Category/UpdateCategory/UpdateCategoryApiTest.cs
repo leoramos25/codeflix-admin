@@ -1,4 +1,5 @@
 using System.Net;
+using Codeflix.Catalog.Api.ApiModels;
 using Codeflix.Catalog.Api.ApiModels.Category;
 using Codeflix.Catalog.Application.UseCases.Category.Update;
 using FluentAssertions;
@@ -17,7 +18,7 @@ public class UpdateCategoryApiTest(UpdateCategoryApiTestFixture fixture) : IDisp
         await fixture.Persistence.InsertList([category], CancellationToken.None);
         var input = fixture.GetValidInput();
 
-        var (response, output) = await fixture.ApiClient.Put<UpdateCategoryOutput>(
+        var (response, output) = await fixture.ApiClient.Put<ApiOutput<UpdateCategoryOutput>>(
             $"/categories/{category.Id}",
             input,
             CancellationToken.None
@@ -26,11 +27,11 @@ public class UpdateCategoryApiTest(UpdateCategoryApiTestFixture fixture) : IDisp
         response.Should().NotBeNull();
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         output.Should().NotBeNull();
-        output.Name.Should().Be(input.Name);
-        output.Description.Should().Be(input.Description);
-        output.Id.Should().Be(category.Id);
-        output.IsActive.Should().Be(input.IsActive!.Value);
-        output.CreatedAt.Should().BeSameDateAs(category.CreatedAt);
+        output.Data.Name.Should().Be(input.Name);
+        output.Data.Description.Should().Be(input.Description);
+        output.Data.Id.Should().Be(category.Id);
+        output.Data.IsActive.Should().Be(input.IsActive!.Value);
+        output.Data.CreatedAt.Should().BeSameDateAs(category.CreatedAt);
 
         var dbContext = fixture.CreateDbContext();
         var dbCategory = await dbContext.Categories.FindAsync(category.Id, CancellationToken.None);

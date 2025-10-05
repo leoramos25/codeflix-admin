@@ -1,6 +1,8 @@
 using System.Net;
+using Codeflix.Catalog.Api.ApiModels;
 using Codeflix.Catalog.Application.UseCases.Category.List;
 using Codeflix.Catalog.Domain.SeedWork.SearchableRepository;
+using Codeflix.Catalog.EndToEndTests.Models;
 using FluentAssertions;
 
 namespace Codeflix.Catalog.EndToEndTests.Api.Category.ListCategories;
@@ -16,19 +18,18 @@ public class ListCategoriesApiTest(ListCategoriesApiTestFixture fixture) : IDisp
         var categories = fixture.GetValidCategories(20);
         await fixture.Persistence.InsertList(categories, CancellationToken.None);
 
-        var (response, output) = await fixture.ApiClient.Get<ListCategoriesOutput>(
-            $"/categories",
-            CancellationToken.None
-        );
+        var (response, output) = await fixture.ApiClient.Get<
+            TestApiResponseList<ListCategoriesItemOutput>
+        >($"/categories", CancellationToken.None);
 
         response.Should().NotBeNull();
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         output.Should().NotBeNull();
-        output.Items.Should().HaveCount(defaultPerPage);
-        output.Total.Should().Be(categories.Count);
-        output.Page.Should().Be(1);
-        output.PerPage.Should().Be(defaultPerPage);
-        foreach (var item in output.Items)
+        output.Data.Should().HaveCount(defaultPerPage);
+        output.Meta!.Total.Should().Be(categories.Count);
+        output.Meta.CurrentPage.Should().Be(1);
+        output.Meta.PerPage.Should().Be(defaultPerPage);
+        foreach (var item in output.Data)
         {
             var expectedItem = categories.FirstOrDefault(x => x.Id == item.Id);
             expectedItem.Should().NotBeNull();
@@ -44,16 +45,15 @@ public class ListCategoriesApiTest(ListCategoriesApiTestFixture fixture) : IDisp
     [Trait("EndToEnd/Api", "Category/List - Endpoints")]
     public async Task ListCategoriesWhenPersistenceEmpty()
     {
-        var (response, output) = await fixture.ApiClient.Get<ListCategoriesOutput>(
-            $"/categories",
-            CancellationToken.None
-        );
+        var (response, output) = await fixture.ApiClient.Get<
+            TestApiResponseList<ListCategoriesItemOutput>
+        >($"/categories", CancellationToken.None);
 
         response.Should().NotBeNull();
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         output.Should().NotBeNull();
-        output.Items.Should().HaveCount(0);
-        output.Total.Should().Be(0);
+        output.Data.Should().HaveCount(0);
+        output.Meta!.Total.Should().Be(0);
     }
 
     [Fact(DisplayName = nameof(ListCategoriesAndTotal))]
@@ -64,20 +64,18 @@ public class ListCategoriesApiTest(ListCategoriesApiTestFixture fixture) : IDisp
         var categories = fixture.GetValidCategories(20);
         await fixture.Persistence.InsertList(categories, CancellationToken.None);
 
-        var (response, output) = await fixture.ApiClient.Get<ListCategoriesOutput>(
-            $"/categories",
-            CancellationToken.None,
-            input
-        );
+        var (response, output) = await fixture.ApiClient.Get<
+            TestApiResponseList<ListCategoriesItemOutput>
+        >($"/categories", CancellationToken.None, input);
 
         response.Should().NotBeNull();
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         output.Should().NotBeNull();
-        output.Items.Should().HaveCount(input.PerPage);
-        output.Total.Should().Be(categories.Count);
-        output.Page.Should().Be(input.Page);
-        output.PerPage.Should().Be(input.PerPage);
-        foreach (var item in output.Items)
+        output.Data.Should().HaveCount(input.PerPage);
+        output.Meta!.Total.Should().Be(categories.Count);
+        output.Meta.CurrentPage.Should().Be(input.Page);
+        output.Meta.PerPage.Should().Be(input.PerPage);
+        foreach (var item in output.Data)
         {
             var expectedItem = categories.FirstOrDefault(x => x.Id == item.Id);
             expectedItem.Should().NotBeNull();
@@ -106,20 +104,18 @@ public class ListCategoriesApiTest(ListCategoriesApiTestFixture fixture) : IDisp
         var categories = fixture.GetValidCategories(quantityCategoriesToGenerate);
         await fixture.Persistence.InsertList(categories, CancellationToken.None);
 
-        var (response, output) = await fixture.ApiClient.Get<ListCategoriesOutput>(
-            $"/categories",
-            CancellationToken.None,
-            input
-        );
+        var (response, output) = await fixture.ApiClient.Get<
+            TestApiResponseList<ListCategoriesItemOutput>
+        >($"/categories", CancellationToken.None, input);
 
         response.Should().NotBeNull();
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         output.Should().NotBeNull();
-        output.Items.Should().HaveCount(expectedQuantityItem);
-        output.Total.Should().Be(categories.Count);
-        output.Page.Should().Be(input.Page);
-        output.PerPage.Should().Be(input.PerPage);
-        foreach (var item in output.Items)
+        output.Data.Should().HaveCount(expectedQuantityItem);
+        output.Meta!.Total.Should().Be(categories.Count);
+        output.Meta.CurrentPage.Should().Be(input.Page);
+        output.Meta.PerPage.Should().Be(input.PerPage);
+        foreach (var item in output.Data)
         {
             var expectedItem = categories.FirstOrDefault(x => x.Id == item.Id);
             expectedItem.Should().NotBeNull();
@@ -166,20 +162,18 @@ public class ListCategoriesApiTest(ListCategoriesApiTestFixture fixture) : IDisp
         );
         await fixture.Persistence.InsertList(categories, CancellationToken.None);
 
-        var (response, output) = await fixture.ApiClient.Get<ListCategoriesOutput>(
-            $"/categories",
-            CancellationToken.None,
-            input
-        );
+        var (response, output) = await fixture.ApiClient.Get<
+            TestApiResponseList<ListCategoriesItemOutput>
+        >($"/categories", CancellationToken.None, input);
 
         response.Should().NotBeNull();
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         output.Should().NotBeNull();
-        output.Items.Should().HaveCount(expectedQuantityReturn);
-        output.Total.Should().Be(expectTotalItems);
-        output.Page.Should().Be(input.Page);
-        output.PerPage.Should().Be(input.PerPage);
-        foreach (var item in output.Items)
+        output.Data.Should().HaveCount(expectedQuantityReturn);
+        output.Meta!.Total.Should().Be(expectTotalItems);
+        output.Meta.CurrentPage.Should().Be(input.Page);
+        output.Meta.PerPage.Should().Be(input.PerPage);
+        foreach (var item in output.Data)
         {
             var expectedItem = categories.FirstOrDefault(x => x.Id == item.Id);
             expectedItem.Should().NotBeNull();
@@ -214,23 +208,21 @@ public class ListCategoriesApiTest(ListCategoriesApiTestFixture fixture) : IDisp
         var categories = fixture.GetValidCategories();
         await fixture.Persistence.InsertList(categories, CancellationToken.None);
 
-        var (response, output) = await fixture.ApiClient.Get<ListCategoriesOutput>(
-            $"/categories",
-            CancellationToken.None,
-            input
-        );
+        var (response, output) = await fixture.ApiClient.Get<
+            TestApiResponseList<ListCategoriesItemOutput>
+        >($"/categories", CancellationToken.None, input);
 
         response.Should().NotBeNull();
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         output.Should().NotBeNull();
-        output.Total.Should().Be(categories.Count);
-        output.Page.Should().Be(input.Page);
-        output.PerPage.Should().Be(input.PerPage);
+        output.Meta!.Total.Should().Be(categories.Count);
+        output.Meta.CurrentPage.Should().Be(input.Page);
+        output.Meta.PerPage.Should().Be(input.PerPage);
         var expectedList = fixture.GetOrderedCategories(categories, input.Sort, input.Dir);
         for (var index = 0; index < expectedList.Count; index++)
         {
             var expectedItem = expectedList[index];
-            var outputItem = output.Items[index];
+            var outputItem = output.Data![index];
             expectedItem.Should().NotBeNull();
             outputItem.Should().NotBeNull();
             outputItem.Id.Should().Be(expectedItem.Id);

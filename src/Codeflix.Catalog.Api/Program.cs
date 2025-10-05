@@ -7,6 +7,7 @@ builder
     .AddApiConnections(builder.Configuration);
 var app = builder.Build();
 app.UseDocumentation();
+
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();

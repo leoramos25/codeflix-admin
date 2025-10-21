@@ -51,7 +51,7 @@ public class UpdateCategoryApiTest(UpdateCategoryApiTestFixture fixture) : IDisp
         await fixture.Persistence.InsertList([category], CancellationToken.None);
         var input = new UpdateCategoryInput(category.Id, fixture.GetValidCategoryName());
 
-        var (response, output) = await fixture.ApiClient.Put<UpdateCategoryOutput>(
+        var (response, output) = await fixture.ApiClient.Put<ApiOutput<UpdateCategoryOutput>>(
             $"/categories/{category.Id}",
             input,
             CancellationToken.None
@@ -60,11 +60,11 @@ public class UpdateCategoryApiTest(UpdateCategoryApiTestFixture fixture) : IDisp
         response.Should().NotBeNull();
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         output.Should().NotBeNull();
-        output.Name.Should().Be(input.Name);
-        output.Description.Should().Be(category.Description);
-        output.Id.Should().Be(category.Id);
-        output.IsActive.Should().Be(category.IsActive);
-        output.CreatedAt.Should().BeSameDateAs(category.CreatedAt);
+        output.Data.Name.Should().Be(input.Name);
+        output.Data.Description.Should().Be(category.Description);
+        output.Data.Id.Should().Be(category.Id);
+        output.Data.IsActive.Should().Be(category.IsActive);
+        output.Data.CreatedAt.Should().BeSameDateAs(category.CreatedAt);
 
         var dbContext = fixture.CreateDbContext();
         var dbCategory = await dbContext.Categories.FindAsync(category.Id, CancellationToken.None);
@@ -88,7 +88,7 @@ public class UpdateCategoryApiTest(UpdateCategoryApiTestFixture fixture) : IDisp
             fixture.GetValidCategoryDescription()
         );
 
-        var (response, output) = await fixture.ApiClient.Put<UpdateCategoryOutput>(
+        var (response, output) = await fixture.ApiClient.Put<ApiOutput<UpdateCategoryOutput>>(
             $"/categories/{category.Id}",
             input,
             CancellationToken.None
@@ -97,11 +97,11 @@ public class UpdateCategoryApiTest(UpdateCategoryApiTestFixture fixture) : IDisp
         response.Should().NotBeNull();
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         output.Should().NotBeNull();
-        output.Name.Should().Be(input.Name);
-        output.Description.Should().Be(input.Description);
-        output.Id.Should().Be(category.Id);
-        output.IsActive.Should().Be(category.IsActive);
-        output.CreatedAt.Should().BeSameDateAs(category.CreatedAt);
+        output.Data.Name.Should().Be(input.Name);
+        output.Data.Description.Should().Be(input.Description);
+        output.Data.Id.Should().Be(category.Id);
+        output.Data.IsActive.Should().Be(category.IsActive);
+        output.Data.CreatedAt.Should().BeSameDateAs(category.CreatedAt);
 
         var dbContext = fixture.CreateDbContext();
         var dbCategory = await dbContext.Categories.FindAsync(category.Id, CancellationToken.None);

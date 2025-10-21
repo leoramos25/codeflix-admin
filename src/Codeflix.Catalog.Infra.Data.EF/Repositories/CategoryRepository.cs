@@ -62,4 +62,12 @@ public class CategoryRepository(CodeflixCatalogDbContext context) : ICategoryRep
         };
         return orderedQuery.ThenBy(x => x.Id);
     }
+
+    public Task<IReadOnlyCollection<Guid>> ListIdsByIds(
+        List<Guid> ids,
+        CancellationToken cancellationToken
+    )
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -35,6 +35,4 @@ public abstract class CategoryUseCaseBaseFixture : BaseFixture
             categoryDescription = categoryDescription[..CategoryDescriptionMaxLength];
         return categoryDescription;
     }
-
-    public bool GetRandomBoolean() => new Random().NextDouble() < 0.5;
 }

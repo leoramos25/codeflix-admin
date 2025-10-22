@@ -13,6 +13,14 @@ public class GenreUseCaseBaseFixture : BaseFixture
 
     public Mock<ICategoryRepository> GetCategoryRepository() => new();
 
+    public Catalog.Domain.Entity.Genre GetValidGenreWithCategories(int categoriesSize)
+    {
+        var genre = GetValidGenre();
+        var categoryIds = Enumerable.Range(1, categoriesSize).Select(_ => Guid.NewGuid()).ToList();
+        categoryIds.ForEach(genre.AddCategory);
+        return genre;
+    }
+
     public Catalog.Domain.Entity.Genre GetValidGenre() => new(GetValidName(), GetRandomBoolean());
 
     public string GetValidName() => Faker.Music.Genre();

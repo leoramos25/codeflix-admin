@@ -7,15 +7,11 @@ namespace Codeflix.Catalog.EndToEndTests.Common;
 
 public abstract class BaseFixture
 {
-    protected Faker Faker { get; set; }
-    public CustomWebApplicationFactory<Program> WebApplicationFactory { get; set; }
-    public HttpClient HttpClient { get; set; }
-    public ApiClient ApiClient { get; set; }
     private readonly string _connectionString;
 
     protected BaseFixture()
     {
-        Faker = new("pt_BR");
+        Faker = new Faker("pt_BR");
         WebApplicationFactory = new CustomWebApplicationFactory<Program>();
         HttpClient = WebApplicationFactory.CreateClient();
         ApiClient = new ApiClient(HttpClient);
@@ -25,6 +21,11 @@ public abstract class BaseFixture
             ((IConfiguration)configuration).GetConnectionString("CatalogDb")
             ?? throw new InvalidOperationException();
     }
+
+    protected Faker Faker { get; set; }
+    public CustomWebApplicationFactory<Program> WebApplicationFactory { get; set; }
+    public HttpClient HttpClient { get; set; }
+    public ApiClient ApiClient { get; set; }
 
     public CodeflixCatalogDbContext CreateDbContext()
     {

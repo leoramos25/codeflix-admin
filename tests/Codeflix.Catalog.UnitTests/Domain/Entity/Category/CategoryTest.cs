@@ -132,7 +132,7 @@ public class CategoryTest(CategoryTestFixture fixture)
         var category = new DomainEntity.Category(
             validCategory.Name,
             validCategory.Description,
-            isActive: false
+            false
         );
         category.Activate();
 
@@ -159,7 +159,7 @@ public class CategoryTest(CategoryTestFixture fixture)
         var newData = new
         {
             Name = fixture.GetValidCategoryName(),
-            Description = fixture.GetValidCategoryDescription(),
+            Description = fixture.GetValidCategoryDescription()
         };
 
         category.Update(newData.Name, newData.Description);
@@ -200,7 +200,7 @@ public class CategoryTest(CategoryTestFixture fixture)
 
     [Theory(DisplayName = nameof(UpdateThrowExceptionWhenNameIsLess3Characters))]
     [Trait("Domain", "Category - Aggregates")]
-    [MemberData(nameof(GetNameWithLessThan3Characters), parameters: 10)]
+    [MemberData(nameof(GetNameWithLessThan3Characters), 10)]
     public void UpdateThrowExceptionWhenNameIsLess3Characters(string invalidName)
     {
         var category = fixture.GetValidCategory();

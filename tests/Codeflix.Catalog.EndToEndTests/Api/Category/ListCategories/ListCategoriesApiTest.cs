@@ -1,5 +1,4 @@
 using System.Net;
-using Codeflix.Catalog.Api.ApiModels;
 using Codeflix.Catalog.Application.UseCases.Category.List;
 using Codeflix.Catalog.Domain.SeedWork.SearchableRepository;
 using Codeflix.Catalog.EndToEndTests.Models;
@@ -10,6 +9,11 @@ namespace Codeflix.Catalog.EndToEndTests.Api.Category.ListCategories;
 [Collection(nameof(ListCategoriesApiTestFixture))]
 public class ListCategoriesApiTest(ListCategoriesApiTestFixture fixture) : IDisposable
 {
+    public void Dispose()
+    {
+        fixture.CleanPersistence();
+    }
+
     [Fact(DisplayName = nameof(ListCategoriesAndTotalWithDefault))]
     [Trait("EndToEnd/Api", "Category/List - Endpoints")]
     public async Task ListCategoriesAndTotalWithDefault()
@@ -20,7 +24,7 @@ public class ListCategoriesApiTest(ListCategoriesApiTestFixture fixture) : IDisp
 
         var (response, output) = await fixture.ApiClient.Get<
             TestApiResponseList<ListCategoriesItemOutput>
-        >($"/categories", CancellationToken.None);
+        >("/categories", CancellationToken.None);
 
         response.Should().NotBeNull();
         response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -47,7 +51,7 @@ public class ListCategoriesApiTest(ListCategoriesApiTestFixture fixture) : IDisp
     {
         var (response, output) = await fixture.ApiClient.Get<
             TestApiResponseList<ListCategoriesItemOutput>
-        >($"/categories", CancellationToken.None);
+        >("/categories", CancellationToken.None);
 
         response.Should().NotBeNull();
         response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -60,13 +64,13 @@ public class ListCategoriesApiTest(ListCategoriesApiTestFixture fixture) : IDisp
     [Trait("EndToEnd/Api", "Category/List - Endpoints")]
     public async Task ListCategoriesAndTotal()
     {
-        var input = new ListCategoriesInput(page: 1, perPage: 10);
+        var input = new ListCategoriesInput(1, 10);
         var categories = fixture.GetValidCategories(20);
         await fixture.Persistence.InsertList(categories, CancellationToken.None);
 
         var (response, output) = await fixture.ApiClient.Get<
             TestApiResponseList<ListCategoriesItemOutput>
-        >($"/categories", CancellationToken.None, input);
+        >("/categories", CancellationToken.None, input);
 
         response.Should().NotBeNull();
         response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -100,13 +104,13 @@ public class ListCategoriesApiTest(ListCategoriesApiTestFixture fixture) : IDisp
         int expectedQuantityItem
     )
     {
-        var input = new ListCategoriesInput(page: page, perPage: perPage);
+        var input = new ListCategoriesInput(page, perPage);
         var categories = fixture.GetValidCategories(quantityCategoriesToGenerate);
         await fixture.Persistence.InsertList(categories, CancellationToken.None);
 
         var (response, output) = await fixture.ApiClient.Get<
             TestApiResponseList<ListCategoriesItemOutput>
-        >($"/categories", CancellationToken.None, input);
+        >("/categories", CancellationToken.None, input);
 
         response.Should().NotBeNull();
         response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -146,7 +150,7 @@ public class ListCategoriesApiTest(ListCategoriesApiTestFixture fixture) : IDisp
         int expectTotalItems
     )
     {
-        var input = new ListCategoriesInput(page: page, perPage: perPage, search: search);
+        var input = new ListCategoriesInput(page, perPage, search);
         var categories = fixture.GetValidCategoriesWithNames(
             [
                 "Action",
@@ -157,14 +161,14 @@ public class ListCategoriesApiTest(ListCategoriesApiTestFixture fixture) : IDisp
                 "Sci-Fi IA",
                 "Sci-Fi Robots",
                 "Sci-Fi Space",
-                "Sci-Fi Future",
+                "Sci-Fi Future"
             ]
         );
         await fixture.Persistence.InsertList(categories, CancellationToken.None);
 
         var (response, output) = await fixture.ApiClient.Get<
             TestApiResponseList<ListCategoriesItemOutput>
-        >($"/categories", CancellationToken.None, input);
+        >("/categories", CancellationToken.None, input);
 
         response.Should().NotBeNull();
         response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -199,18 +203,18 @@ public class ListCategoriesApiTest(ListCategoriesApiTestFixture fixture) : IDisp
             ? SearchOrder.Asc
             : SearchOrder.Desc;
         var input = new ListCategoriesInput(
-            page: 1,
-            perPage: 20,
-            search: "",
-            sort: orderBy,
-            dir: searchOrder
+            1,
+            20,
+            "",
+            orderBy,
+            searchOrder
         );
         var categories = fixture.GetValidCategories();
         await fixture.Persistence.InsertList(categories, CancellationToken.None);
 
         var (response, output) = await fixture.ApiClient.Get<
             TestApiResponseList<ListCategoriesItemOutput>
-        >($"/categories", CancellationToken.None, input);
+        >("/categories", CancellationToken.None, input);
 
         response.Should().NotBeNull();
         response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -232,6 +236,4 @@ public class ListCategoriesApiTest(ListCategoriesApiTestFixture fixture) : IDisp
             outputItem.CreatedAt.Should().BeSameDateAs(expectedItem.CreatedAt);
         }
     }
-
-    public void Dispose() => fixture.CleanPersistence();
 }

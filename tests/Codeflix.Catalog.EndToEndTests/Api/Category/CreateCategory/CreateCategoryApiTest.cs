@@ -10,6 +10,11 @@ namespace Codeflix.Catalog.EndToEndTests.Api.Category.CreateCategory;
 [Collection(nameof(CreateCategoryApiTestFixture))]
 public class CreateCategoryApiTest(CreateCategoryApiTestFixture fixture) : IDisposable
 {
+    public void Dispose()
+    {
+        fixture.CleanPersistence();
+    }
+
     [Fact(DisplayName = nameof(CreateCategory))]
     [Trait("EndToEnd/Api", "CreateCategory - Endpoints")]
     public async Task CreateCategory()
@@ -66,6 +71,4 @@ public class CreateCategoryApiTest(CreateCategoryApiTestFixture fixture) : IDisp
         output.Detail.Should().Be(errorMessage);
         output.Status.Should().Be(StatusCodes.Status422UnprocessableEntity);
     }
-
-    public void Dispose() => fixture.CleanPersistence();
 }

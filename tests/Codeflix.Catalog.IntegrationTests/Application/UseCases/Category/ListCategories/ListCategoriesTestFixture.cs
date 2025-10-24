@@ -1,4 +1,3 @@
-using Codeflix.Catalog.Application.UseCases.Category.List;
 using Codeflix.Catalog.Domain.SeedWork.SearchableRepository;
 using Codeflix.Catalog.IntegrationTests.Application.UseCases.Category.Common;
 
@@ -24,13 +23,14 @@ public class ListCategoriesTestFixture : CategoryUseCaseBaseFixture
             ("id", SearchOrder.Desc) => listClone.OrderByDescending(x => x.Id),
             ("createdat", SearchOrder.Asc) => listClone.OrderBy(x => x.CreatedAt),
             ("createdat", SearchOrder.Desc) => listClone.OrderByDescending(x => x.CreatedAt),
-            _ => listClone.OrderBy(x => x.Name),
+            _ => listClone.OrderBy(x => x.Name)
         };
         return orderedEnumerable.ThenBy(x => x.Id).ToList();
     }
 
-    public List<Domain.Entity.Category> GetValidCategoriesWithNames(List<string> categoryNames) =>
-        categoryNames
+    public List<Domain.Entity.Category> GetValidCategoriesWithNames(List<string> categoryNames)
+    {
+        return categoryNames
             .Select(name =>
             {
                 var category = GetValidCategory();
@@ -38,4 +38,5 @@ public class ListCategoriesTestFixture : CategoryUseCaseBaseFixture
                 return category;
             })
             .ToList();
+    }
 }

@@ -5,8 +5,6 @@ namespace Codeflix.Catalog.Api.ApiModels;
 public class ApiListOutput<TItemData> : ApiOutput<IReadOnlyCollection<TItemData>>
     where TItemData : class
 {
-    public ApiMetaOutput Meta { get; private set; }
-
     public ApiListOutput(int currentPage, int perPage, int total, IReadOnlyList<TItemData> data)
         : base(data)
     {
@@ -22,4 +20,6 @@ public class ApiListOutput<TItemData> : ApiOutput<IReadOnlyCollection<TItemData>
             paginatedListOutput.Total
         );
     }
+
+    public ApiMetaOutput Meta { get; private set; }
 }

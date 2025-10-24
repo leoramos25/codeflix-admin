@@ -9,8 +9,10 @@ public class ListCategoriesApiTestFixtureCollection
 
 public class ListCategoriesApiTestFixture : CategoryBaseFixture
 {
-    public List<Domain.Entity.Category> GetValidCategories(int size = 10) =>
-        Enumerable.Range(0, size).Select(_ => GetValidCategory()).ToList();
+    public List<Domain.Entity.Category> GetValidCategories(int size = 10)
+    {
+        return Enumerable.Range(0, size).Select(_ => GetValidCategory()).ToList();
+    }
 
     public List<Domain.Entity.Category> GetOrderedCategories(
         List<Domain.Entity.Category> categories,
@@ -33,13 +35,14 @@ public class ListCategoriesApiTestFixture : CategoryBaseFixture
             ("id", SearchOrder.Desc) => listClone.OrderByDescending(x => x.Id),
             ("createdat", SearchOrder.Asc) => listClone.OrderBy(x => x.CreatedAt),
             ("createdat", SearchOrder.Desc) => listClone.OrderByDescending(x => x.CreatedAt),
-            _ => listClone.OrderBy(x => x.Name),
+            _ => listClone.OrderBy(x => x.Name)
         };
         return orderedEnumerable.ThenBy(x => x.Id).ToList();
     }
 
-    public List<Domain.Entity.Category> GetValidCategoriesWithNames(List<string> categoryNames) =>
-        categoryNames
+    public List<Domain.Entity.Category> GetValidCategoriesWithNames(List<string> categoryNames)
+    {
+        return categoryNames
             .Select(name =>
             {
                 var category = GetValidCategory();
@@ -47,4 +50,5 @@ public class ListCategoriesApiTestFixture : CategoryBaseFixture
                 return category;
             })
             .ToList();
+    }
 }

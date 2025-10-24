@@ -10,24 +10,30 @@ public class CategoryRepository(CodeflixCatalogDbContext context) : ICategoryRep
 {
     private readonly DbSet<Category> _categories = context.Categories;
 
-    public async Task Insert(Category aggregate, CancellationToken cancellationToken) =>
+    public async Task Insert(Category aggregate, CancellationToken cancellationToken)
+    {
         await _categories.AddAsync(aggregate, cancellationToken);
+    }
 
     public async Task<Category> Get(Guid id, CancellationToken cancellationToken)
     {
         var category = await _categories.FindAsync(
             [id, cancellationToken],
-            cancellationToken: cancellationToken
+            cancellationToken
         );
         NotFoundException.ThrowIfNull(category, $"Category '{id}' not found.");
         return category!;
     }
 
-    public async Task Delete(Category aggregate, CancellationToken cancellationToken) =>
+    public async Task Delete(Category aggregate, CancellationToken cancellationToken)
+    {
         await Task.FromResult(_categories.Remove(aggregate));
+    }
 
-    public async Task Update(Category aggregate, CancellationToken cancellationToken) =>
+    public async Task Update(Category aggregate, CancellationToken cancellationToken)
+    {
         await Task.FromResult(_categories.Update(aggregate));
+    }
 
     public async Task<SearchOutput<Category>> Search(
         SearchInput input,
@@ -44,6 +50,14 @@ public class CategoryRepository(CodeflixCatalogDbContext context) : ICategoryRep
         return new SearchOutput<Category>(input.Page, input.PerPage, total, items);
     }
 
+    public Task<IReadOnlyCollection<Guid>> ListIdsByIds(
+        List<Guid> ids,
+        CancellationToken cancellationToken
+    )
+    {
+        throw new NotImplementedException();
+    }
+
     private static IQueryable<Category> AddOrderToQuery(
         IQueryable<Category> query,
         string orderProperty,
@@ -58,16 +72,8 @@ public class CategoryRepository(CodeflixCatalogDbContext context) : ICategoryRep
             ("id", SearchOrder.Desc) => query.OrderByDescending(x => x.Id),
             ("createdat", SearchOrder.Asc) => query.OrderBy(x => x.CreatedAt),
             ("createdat", SearchOrder.Desc) => query.OrderByDescending(x => x.CreatedAt),
-            _ => query.OrderBy(x => x.Name),
+            _ => query.OrderBy(x => x.Name)
         };
         return orderedQuery.ThenBy(x => x.Id);
-    }
-
-    public Task<IReadOnlyCollection<Guid>> ListIdsByIds(
-        List<Guid> ids,
-        CancellationToken cancellationToken
-    )
-    {
-        throw new NotImplementedException();
     }
 }

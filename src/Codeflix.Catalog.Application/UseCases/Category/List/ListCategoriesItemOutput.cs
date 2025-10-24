@@ -2,12 +2,6 @@ namespace Codeflix.Catalog.Application.UseCases.Category.List;
 
 public class ListCategoriesItemOutput
 {
-    public Guid Id { get; set; }
-    public string Name { get; set; }
-    public string Description { get; set; }
-    public bool IsActive { get; set; }
-    public DateTime CreatedAt { get; set; }
-
     public ListCategoriesItemOutput(
         Guid id,
         string name,
@@ -23,12 +17,20 @@ public class ListCategoriesItemOutput
         CreatedAt = createdAt;
     }
 
-    public static ListCategoriesItemOutput FromCategory(Domain.Entity.Category category) =>
-        new(
+    public Guid Id { get; set; }
+    public string Name { get; set; }
+    public string Description { get; set; }
+    public bool IsActive { get; set; }
+    public DateTime CreatedAt { get; set; }
+
+    public static ListCategoriesItemOutput FromCategory(Domain.Entity.Category category)
+    {
+        return new ListCategoriesItemOutput(
             category.Id,
             category.Name,
             category.Description,
             category.IsActive,
             category.CreatedAt
         );
+    }
 }

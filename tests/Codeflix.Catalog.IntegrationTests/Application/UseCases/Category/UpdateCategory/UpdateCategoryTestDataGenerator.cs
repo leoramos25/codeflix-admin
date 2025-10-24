@@ -20,7 +20,6 @@ public class UpdateCategoryTestDataGenerator
         const int totalInvalidCases = 5;
 
         for (var i = 0; i < times; i++)
-        {
             switch (i % totalInvalidCases)
             {
                 case 0:
@@ -40,7 +39,7 @@ public class UpdateCategoryTestDataGenerator
                     invalidInputs.Add(
                         [
                             invalidInputDescriptionLongName,
-                            "Description should be less or equal 10000 characters long",
+                            "Description should be less or equal 10000 characters long"
                         ]
                     );
                     break;
@@ -49,7 +48,6 @@ public class UpdateCategoryTestDataGenerator
                     invalidInputs.Add([invalidNullNameInput, "Name should not be empty or null"]);
                     break;
             }
-        }
 
         return invalidInputs;
     }

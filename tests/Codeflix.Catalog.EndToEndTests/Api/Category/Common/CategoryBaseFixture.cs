@@ -8,16 +8,17 @@ public class CategoryBaseFixture : BaseFixture
     protected const int CategoryNameMaxLength = 255;
     protected const int CategoryDescriptionMaxLength = 10_000;
 
-    public CategoryPersistence Persistence { get; }
-
     public CategoryBaseFixture()
-        : base()
     {
         Persistence = new CategoryPersistence(CreateDbContext());
     }
 
-    public Domain.Entity.Category GetValidCategory() =>
-        new(GetValidCategoryName(), GetValidCategoryDescription(), GetRandomBoolean());
+    public CategoryPersistence Persistence { get; }
+
+    public Domain.Entity.Category GetValidCategory()
+    {
+        return new Domain.Entity.Category(GetValidCategoryName(), GetValidCategoryDescription(), GetRandomBoolean());
+    }
 
     public string GetInvalidInputDescriptionLong()
     {
@@ -60,5 +61,8 @@ public class CategoryBaseFixture : BaseFixture
         return categoryDescription;
     }
 
-    public bool GetRandomBoolean() => new Random().NextDouble() < 0.5;
-};
+    public bool GetRandomBoolean()
+    {
+        return new Random().NextDouble() < 0.5;
+    }
+}

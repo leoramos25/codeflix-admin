@@ -3,7 +3,6 @@ using Codeflix.Catalog.Application.UseCases.Category.Create;
 using Codeflix.Catalog.Domain.Repository;
 using Codeflix.Catalog.Infra.Data.EF;
 using Codeflix.Catalog.Infra.Data.EF.Repositories;
-using MediatR;
 
 namespace Codeflix.Catalog.Api.Configurations;
 

@@ -16,8 +16,8 @@ public class ListCategoriesTest(ListCategoriesTestFixture fixture)
         var input = fixture.GetValidInput();
         var categories = fixture.GetCategories();
         var outputSearch = new SearchOutput<Catalog.Domain.Entity.Category>(
-            currentPage: input.Page,
-            perPage: input.PerPage,
+            input.Page,
+            input.PerPage,
             items: categories,
             total: new Random().Next(50, 200)
         );
@@ -73,7 +73,7 @@ public class ListCategoriesTest(ListCategoriesTestFixture fixture)
     [Trait("Application", "ListCategories - Use Cases")]
     [MemberData(
         nameof(ListCategoriesTestDataGenerator.GetValidInputs),
-        parameters: 15,
+        15,
         MemberType = typeof(ListCategoriesTestDataGenerator)
     )]
     public async Task ListInputWithoutAllParameters(UseCases.ListCategoriesInput input)
@@ -81,8 +81,8 @@ public class ListCategoriesTest(ListCategoriesTestFixture fixture)
         var repositoryMock = fixture.GetRepositoryMock();
         var categories = fixture.GetCategories();
         var outputSearch = new SearchOutput<Catalog.Domain.Entity.Category>(
-            currentPage: input.Page,
-            perPage: input.PerPage,
+            input.Page,
+            input.PerPage,
             items: categories,
             total: new Random().Next(50, 200)
         );
@@ -141,8 +141,8 @@ public class ListCategoriesTest(ListCategoriesTestFixture fixture)
         var repositoryMock = fixture.GetRepositoryMock();
         var input = fixture.GetValidInput();
         var outputSearch = new SearchOutput<Catalog.Domain.Entity.Category>(
-            currentPage: input.Page,
-            perPage: input.PerPage,
+            input.Page,
+            input.PerPage,
             items: new List<Catalog.Domain.Entity.Category>().AsReadOnly(),
             total: 0
         );

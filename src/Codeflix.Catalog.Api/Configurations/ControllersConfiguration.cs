@@ -33,6 +33,7 @@ public static class ControllersConfiguration
             app.UseSwagger();
             app.UseSwaggerUI();
         }
+
         return app;
     }
 }

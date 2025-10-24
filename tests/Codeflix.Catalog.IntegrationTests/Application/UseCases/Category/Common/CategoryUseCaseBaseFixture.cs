@@ -8,11 +8,15 @@ public class CategoryUseCaseBaseFixture : BaseFixture
     protected const int CategoryNameMaxLength = 255;
     protected const int CategoryDescriptionMaxLength = 10_000;
 
-    public List<Domain.Entity.Category> GetValidCategories(int size = 10) =>
-        Enumerable.Range(0, size).Select(_ => GetValidCategory()).ToList();
+    public List<Domain.Entity.Category> GetValidCategories(int size = 10)
+    {
+        return Enumerable.Range(0, size).Select(_ => GetValidCategory()).ToList();
+    }
 
-    public Domain.Entity.Category GetValidCategory() =>
-        new(GetValidCategoryName(), GetValidCategoryDescription(), GetRandomBoolean());
+    public Domain.Entity.Category GetValidCategory()
+    {
+        return new Domain.Entity.Category(GetValidCategoryName(), GetValidCategoryDescription(), GetRandomBoolean());
+    }
 
     public string GetValidCategoryName()
     {
@@ -32,5 +36,8 @@ public class CategoryUseCaseBaseFixture : BaseFixture
         return categoryDescription;
     }
 
-    public bool GetRandomBoolean() => new Random().NextDouble() < 0.5;
+    public bool GetRandomBoolean()
+    {
+        return new Random().NextDouble() < 0.5;
+    }
 }

@@ -9,7 +9,6 @@ public class ListCategoriesTestDataGenerator
         var fixture = new ListCategoriesTestFixture();
         var input = fixture.GetValidInput();
         for (var i = 0; i < times; i++)
-        {
             switch (i % 5)
             {
                 case 0:
@@ -32,13 +31,12 @@ public class ListCategoriesTestDataGenerator
                             input.PerPage,
                             input.Search,
                             input.Sort
-                        ),
+                        )
                     ];
                     break;
                 case 5:
                     yield return [input];
                     break;
             }
-        }
     }
 }

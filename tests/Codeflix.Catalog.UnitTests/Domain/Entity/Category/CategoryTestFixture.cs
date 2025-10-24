@@ -8,11 +8,10 @@ public class CategoryTestFixtureCollection : ICollectionFixture<CategoryTestFixt
 
 public class CategoryTestFixture : BaseFixture
 {
-    public CategoryTestFixture()
-        : base() { }
-
-    public DomainEntity.Category GetValidCategory() =>
-        new(GetValidCategoryName(), GetValidCategoryDescription());
+    public DomainEntity.Category GetValidCategory()
+    {
+        return new DomainEntity.Category(GetValidCategoryName(), GetValidCategoryDescription());
+    }
 
     public string GetValidCategoryName()
     {

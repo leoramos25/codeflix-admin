@@ -1,4 +1,5 @@
 using Bogus;
+using Codeflix.Catalog.Domain.Entity;
 using Codeflix.Catalog.Infra.Data.EF;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,9 +7,16 @@ namespace Codeflix.Catalog.IntegrationTests.Common;
 
 public class BaseFixture
 {
-    public Faker Faker { get; set; }
+    protected const int CategoryNameMinLength = 2;
+    protected const int CategoryNameMaxLength = 255;
+    protected const int CategoryDescriptionMaxLength = 10_000;
 
-    protected BaseFixture() => Faker = new("pt_BR");
+    protected BaseFixture()
+    {
+        Faker = new Faker("pt_BR");
+    }
+
+    public Faker Faker { get; set; }
 
     public CodeflixCatalogDbContext CreateDbContext(bool preserveData = false)
     {
@@ -20,5 +28,38 @@ public class BaseFixture
         if (!preserveData)
             dbContext.Database.EnsureDeleted();
         return dbContext;
+    }
+
+    public List<Category> GetValidCategories(int size = 10)
+    {
+        return Enumerable.Range(0, size).Select(_ => GetValidCategory()).ToList();
+    }
+
+    public Category GetValidCategory()
+    {
+        return new Category(GetValidCategoryName(), GetValidCategoryDescription(), GetRandomBoolean());
+    }
+
+    public string GetValidCategoryName()
+    {
+        var categoryName = string.Empty;
+        while (categoryName.Length < CategoryNameMinLength)
+            categoryName = Faker.Commerce.Categories(1)[0];
+        if (categoryName.Length > CategoryNameMaxLength)
+            categoryName = categoryName[..CategoryNameMaxLength];
+        return categoryName;
+    }
+
+    public string GetValidCategoryDescription()
+    {
+        var categoryDescription = Faker.Commerce.ProductDescription();
+        if (categoryDescription.Length > CategoryDescriptionMaxLength)
+            categoryDescription = categoryDescription[..CategoryDescriptionMaxLength];
+        return categoryDescription;
+    }
+
+    public bool GetRandomBoolean()
+    {
+        return new Random().NextDouble() > 0.5;
     }
 }

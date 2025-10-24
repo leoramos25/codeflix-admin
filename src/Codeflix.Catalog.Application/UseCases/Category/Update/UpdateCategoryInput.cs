@@ -4,11 +4,6 @@ namespace Codeflix.Catalog.Application.UseCases.Category.Update;
 
 public class UpdateCategoryInput : IRequest<UpdateCategoryOutput>
 {
-    public Guid Id { get; set; }
-    public string Name { get; set; }
-    public string? Description { get; set; }
-    public bool? IsActive { get; set; }
-
     public UpdateCategoryInput(
         Guid id,
         string name,
@@ -21,4 +16,9 @@ public class UpdateCategoryInput : IRequest<UpdateCategoryOutput>
         Description = description;
         IsActive = isActive;
     }
+
+    public Guid Id { get; set; }
+    public string Name { get; set; }
+    public string? Description { get; set; }
+    public bool? IsActive { get; set; }
 }

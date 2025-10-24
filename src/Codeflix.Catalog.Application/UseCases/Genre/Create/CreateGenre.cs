@@ -21,6 +21,7 @@ public class CreateGenre(
             await ValidateRelatedCategories(request.Categories, cancellationToken);
             request.Categories.ForEach(genre.AddCategory);
         }
+
         await genreRepository.Insert(genre, cancellationToken);
         await unitOfWork.Commit(cancellationToken);
         return CreateGenreOutput.FromGenre(genre);

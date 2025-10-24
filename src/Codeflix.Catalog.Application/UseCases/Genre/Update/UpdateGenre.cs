@@ -31,6 +31,7 @@ public class UpdateGenre(
                 request.Categories.ForEach(genre.AddCategory);
             }
         }
+
         await genreRepository.Update(genre, cancellationToken);
         await unitOfWork.Commit(cancellationToken);
         return UpdateGenreOutput.FromGenre(genre);

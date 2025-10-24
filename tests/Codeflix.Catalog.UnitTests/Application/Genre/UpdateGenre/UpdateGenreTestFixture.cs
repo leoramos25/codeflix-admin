@@ -12,7 +12,10 @@ public class UpdateGenreTestFixture : GenreUseCaseBaseFixture
         Guid id,
         bool? isActive = null,
         List<Guid>? categories = null
-    ) => new(id, GetValidName(), isActive, categories);
+    )
+    {
+        return new UpdateGenreInput(id, GetValidName(), isActive, categories);
+    }
 
     public UpdateGenreInput GetValidInputWithCategories(Guid id, bool? isActive = null)
     {
@@ -21,6 +24,6 @@ public class UpdateGenreTestFixture : GenreUseCaseBaseFixture
             .Range(1, numberOfCategoryIds)
             .Select(_ => Guid.NewGuid())
             .ToList();
-        return new(id, GetValidName(), isActive, categories);
+        return new UpdateGenreInput(id, GetValidName(), isActive, categories);
     }
 }

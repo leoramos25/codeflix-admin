@@ -45,6 +45,8 @@ public class CreateCategoryTestFixture : CategoryUseCaseBaseFixture
         return invalidInputShortName;
     }
 
-    public CreateCategoryInput GetValidInput() =>
-        new(GetValidCategoryName(), GetValidCategoryDescription(), GetRandomBoolean());
+    public CreateCategoryInput GetValidInput()
+    {
+        return new CreateCategoryInput(GetValidCategoryName(), GetValidCategoryDescription(), GetRandomBoolean());
+    }
 }

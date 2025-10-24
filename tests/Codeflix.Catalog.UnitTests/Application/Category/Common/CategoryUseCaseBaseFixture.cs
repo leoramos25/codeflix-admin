@@ -11,12 +11,21 @@ public abstract class CategoryUseCaseBaseFixture : BaseFixture
     protected const int CategoryNameMaxLength = 255;
     protected const int CategoryDescriptionMaxLength = 10_000;
 
-    public Mock<ICategoryRepository> GetRepositoryMock() => new();
+    public Mock<ICategoryRepository> GetRepositoryMock()
+    {
+        return new Mock<ICategoryRepository>();
+    }
 
-    public Mock<IUnitOfWork> GetUnitOfWorkMock() => new();
+    public Mock<IUnitOfWork> GetUnitOfWorkMock()
+    {
+        return new Mock<IUnitOfWork>();
+    }
 
-    public Catalog.Domain.Entity.Category GetValidCategory() =>
-        new(GetValidCategoryName(), GetValidCategoryDescription(), GetRandomBoolean());
+    public Catalog.Domain.Entity.Category GetValidCategory()
+    {
+        return new Catalog.Domain.Entity.Category(GetValidCategoryName(), GetValidCategoryDescription(),
+            GetRandomBoolean());
+    }
 
     public string GetValidCategoryName()
     {

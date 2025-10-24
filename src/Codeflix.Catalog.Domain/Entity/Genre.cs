@@ -5,11 +5,7 @@ namespace Codeflix.Catalog.Domain.Entity;
 
 public class Genre : AggregateRoot
 {
-    public string Name { get; private set; }
-    public bool IsActive { get; private set; }
-    public DateTime CreatedAt { get; private set; }
-    public IReadOnlyCollection<Guid> Categories => _categories.AsReadOnly();
-    private List<Guid> _categories;
+    private readonly List<Guid> _categories;
 
     public Genre(string name, bool isActive = true)
     {
@@ -19,6 +15,11 @@ public class Genre : AggregateRoot
         _categories = [];
         Validate();
     }
+
+    public string Name { get; private set; }
+    public bool IsActive { get; private set; }
+    public DateTime CreatedAt { get; private set; }
+    public IReadOnlyCollection<Guid> Categories => _categories.AsReadOnly();
 
     public void Activate()
     {

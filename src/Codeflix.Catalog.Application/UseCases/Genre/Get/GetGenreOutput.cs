@@ -8,6 +8,8 @@ public record GetGenreOutput(
     DateTime CreatedAt
 )
 {
-    public static GetGenreOutput FromGenre(Domain.Entity.Genre genre) =>
-        new(genre.Id, genre.Name, genre.IsActive, genre.Categories, genre.CreatedAt);
+    public static GetGenreOutput FromGenre(Domain.Entity.Genre genre)
+    {
+        return new GetGenreOutput(genre.Id, genre.Name, genre.IsActive, genre.Categories, genre.CreatedAt);
+    }
 }

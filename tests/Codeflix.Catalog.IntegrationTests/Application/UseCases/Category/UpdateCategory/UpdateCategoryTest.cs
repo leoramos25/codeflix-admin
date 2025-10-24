@@ -14,11 +14,11 @@ public class UpdateCategoryTest(UpdateCategoryTestFixture fixture)
     [Trait("Application", "UpdateCategory - Use Cases")]
     [MemberData(
         nameof(UpdateCategoryTestDataGenerator.GetCategoriesToUpdate),
-        parameters: 5,
+        5,
         MemberType = typeof(UpdateCategoryTestDataGenerator)
     )]
     public async Task UpdateCategory(
-        Catalog.Domain.Entity.Category category,
+        Domain.Entity.Category category,
         UseCase.UpdateCategoryInput input
     )
     {
@@ -68,11 +68,11 @@ public class UpdateCategoryTest(UpdateCategoryTestFixture fixture)
     [Trait("Application", "UpdateCategory - Use Cases")]
     [MemberData(
         nameof(UpdateCategoryTestDataGenerator.GetCategoriesToUpdate),
-        parameters: 5,
+        5,
         MemberType = typeof(UpdateCategoryTestDataGenerator)
     )]
     public async Task UpdateCategoryWithoutProvidingIsActive(
-        Catalog.Domain.Entity.Category category,
+        Domain.Entity.Category category,
         UseCase.UpdateCategoryInput exampleInput
     )
     {
@@ -112,11 +112,11 @@ public class UpdateCategoryTest(UpdateCategoryTestFixture fixture)
     [Trait("Application", "UpdateCategory - Use Cases")]
     [MemberData(
         nameof(UpdateCategoryTestDataGenerator.GetCategoriesToUpdate),
-        parameters: 10,
+        10,
         MemberType = typeof(UpdateCategoryTestDataGenerator)
     )]
     public async Task UpdateCategoryOnlyName(
-        Catalog.Domain.Entity.Category category,
+        Domain.Entity.Category category,
         UseCase.UpdateCategoryInput exampleInput
     )
     {
@@ -152,7 +152,7 @@ public class UpdateCategoryTest(UpdateCategoryTestFixture fixture)
     [Trait("Application", "CreateCategory - Use Cases")]
     [MemberData(
         nameof(UpdateCategoryTestDataGenerator.GetInvalidInputs),
-        parameters: 12,
+        12,
         MemberType = typeof(UpdateCategoryTestDataGenerator)
     )]
     public async Task UpdateThrowWhenCantInstantiateCategory(

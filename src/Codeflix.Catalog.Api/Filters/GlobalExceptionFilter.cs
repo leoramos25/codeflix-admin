@@ -17,21 +17,21 @@ public class GlobalExceptionFilter(IHostEnvironment env) : IExceptionFilter
 
         if (exception is EntityValidationException)
         {
-            details.Title = $"One or more validation errors occurred";
+            details.Title = "One or more validation errors occurred";
             details.Status = StatusCodes.Status422UnprocessableEntity;
             details.Type = "UnprocessableEntity";
             details.Detail = exception.Message;
         }
         else if (exception is NotFoundException)
         {
-            details.Title = $"Not found";
+            details.Title = "Not found";
             details.Status = StatusCodes.Status404NotFound;
             details.Type = "NotFound";
             details.Detail = exception.Message;
         }
         else
         {
-            details.Title = $"An unexpected error occurred";
+            details.Title = "An unexpected error occurred";
             details.Status = StatusCodes.Status500InternalServerError;
             details.Type = "InternalServerError";
             details.Detail = exception.Message;

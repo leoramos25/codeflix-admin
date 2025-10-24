@@ -8,7 +8,10 @@ public class CreateGenreTestFixtureCollection : ICollectionFixture<CreateGenreTe
 
 public class CreateGenreTestFixture : GenreUseCaseBaseFixture
 {
-    public CreateGenreInput GetValidInput() => new(GetValidName(), GetRandomBoolean());
+    public CreateGenreInput GetValidInput()
+    {
+        return new CreateGenreInput(GetValidName(), GetRandomBoolean());
+    }
 
     public CreateGenreInput GetValidInputWithCategories()
     {

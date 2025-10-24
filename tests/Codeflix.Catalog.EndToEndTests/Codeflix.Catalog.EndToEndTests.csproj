@@ -11,17 +11,17 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Bogus" Version="35.6.3" />
+        <PackageReference Include="Bogus" Version="35.6.3"/>
         <PackageReference Include="coverlet.collector" Version="6.0.0"/>
-        <PackageReference Include="FluentAssertions" Version="8.6.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.19" />
+        <PackageReference Include="FluentAssertions" Version="8.6.0"/>
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.19"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.9">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.8" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.8"/>
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0"/>
-        <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />
+        <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0"/>
         <PackageReference Include="xunit" Version="2.5.3"/>
         <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3"/>
     </ItemGroup>
@@ -31,14 +31,14 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\Codeflix.Catalog.Api\Codeflix.Catalog.Api.csproj" />
-      <ProjectReference Include="..\..\src\Codeflix.Catalog.Infra.Data.EF\Codeflix.Catalog.Infra.Data.EF.csproj" />
+        <ProjectReference Include="..\..\src\Codeflix.Catalog.Api\Codeflix.Catalog.Api.csproj"/>
+        <ProjectReference Include="..\..\src\Codeflix.Catalog.Infra.Data.EF\Codeflix.Catalog.Infra.Data.EF.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="xunit.runner.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
+        <None Update="xunit.runner.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
 </Project>

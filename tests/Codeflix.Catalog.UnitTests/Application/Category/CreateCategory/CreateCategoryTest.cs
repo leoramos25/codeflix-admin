@@ -99,7 +99,7 @@ public class CreateCategoryTest(CreateCategoryTestFixture fixture)
     [Trait("Application", "CreateCategory - Use Cases")]
     [MemberData(
         nameof(CreateCategoryTestDataGenerator.GetInvalidInputs),
-        parameters: 15,
+        15,
         MemberType = typeof(CreateCategoryTestDataGenerator)
     )]
     public async Task CreateCategoryThrowWhenCantInstantiateCategory(

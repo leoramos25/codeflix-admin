@@ -10,6 +10,11 @@ namespace Codeflix.Catalog.EndToEndTests.Api.Category.UpdateCategory;
 [Collection(nameof(UpdateCategoryApiTestFixture))]
 public class UpdateCategoryApiTest(UpdateCategoryApiTestFixture fixture) : IDisposable
 {
+    public void Dispose()
+    {
+        fixture.CleanPersistence();
+    }
+
     [Fact(DisplayName = nameof(Update))]
     [Trait("EndToEnd/Api", "UpdateCategory - Endpoints")]
     public async Task Update()
@@ -140,7 +145,7 @@ public class UpdateCategoryApiTest(UpdateCategoryApiTestFixture fixture) : IDisp
     [Trait("EndToEnd/Api", "UpdateCategory - Endpoints")]
     [MemberData(
         nameof(UpdateCategoryApiTestDataGenerator.GetInvalidData),
-        parameters: 3,
+        3,
         MemberType = typeof(UpdateCategoryApiTestDataGenerator)
     )]
     public async Task ThrowErrorWhenCantInstantiateCategory(
@@ -165,6 +170,4 @@ public class UpdateCategoryApiTest(UpdateCategoryApiTestFixture fixture) : IDisp
         output.Type.Should().Be("UnprocessableEntity");
         output.Detail.Should().Be(errorMessage);
     }
-
-    public void Dispose() => fixture.CleanPersistence();
 }

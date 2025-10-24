@@ -9,24 +9,24 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.9">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.8" />
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-        <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.8"/>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.1"/>
+        <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0"/>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="..\..\.dockerignore">
-        <Link>.dockerignore</Link>
-      </Content>
+        <Content Include="..\..\.dockerignore">
+            <Link>.dockerignore</Link>
+        </Content>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Codeflix.Catalog.Application\Codeflix.Catalog.Application.csproj" />
-      <ProjectReference Include="..\Codeflix.Catalog.Infra.Data.EF\Codeflix.Catalog.Infra.Data.EF.csproj" />
+        <ProjectReference Include="..\Codeflix.Catalog.Application\Codeflix.Catalog.Application.csproj"/>
+        <ProjectReference Include="..\Codeflix.Catalog.Infra.Data.EF\Codeflix.Catalog.Infra.Data.EF.csproj"/>
     </ItemGroup>
 
 </Project>

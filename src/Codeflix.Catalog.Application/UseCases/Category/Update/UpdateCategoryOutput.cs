@@ -2,12 +2,6 @@ namespace Codeflix.Catalog.Application.UseCases.Category.Update;
 
 public class UpdateCategoryOutput
 {
-    public Guid Id { get; set; }
-    public string Name { get; set; }
-    public string Description { get; set; }
-    public bool IsActive { get; set; }
-    public DateTime CreatedAt { get; set; }
-
     public UpdateCategoryOutput(
         Guid id,
         string name,
@@ -23,12 +17,20 @@ public class UpdateCategoryOutput
         CreatedAt = createdAt;
     }
 
-    public static UpdateCategoryOutput FromCategory(Domain.Entity.Category category) =>
-        new(
+    public Guid Id { get; set; }
+    public string Name { get; set; }
+    public string Description { get; set; }
+    public bool IsActive { get; set; }
+    public DateTime CreatedAt { get; set; }
+
+    public static UpdateCategoryOutput FromCategory(Domain.Entity.Category category)
+    {
+        return new UpdateCategoryOutput(
             category.Id,
             category.Name,
             category.Description,
             category.IsActive,
             category.CreatedAt
         );
+    }
 }

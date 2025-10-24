@@ -7,6 +7,8 @@ public class GetCategoryApiTestFixtureCollection : IClassFixture<GetCategoryApiT
 
 public class GetCategoryApiTestFixture : CategoryBaseFixture
 {
-    public List<Domain.Entity.Category> GetCategories(int size = 10) =>
-        Enumerable.Range(0, size).Select(_ => GetValidCategory()).ToList();
+    public List<Domain.Entity.Category> GetCategories(int size = 10)
+    {
+        return Enumerable.Range(0, size).Select(_ => GetValidCategory()).ToList();
+    }
 }

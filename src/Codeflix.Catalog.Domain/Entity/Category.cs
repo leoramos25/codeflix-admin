@@ -9,13 +9,7 @@ public class Category : AggregateRoot
     private const int MaxNameSize = 255;
     private const int MaxDescriptionSize = 10_000;
 
-    public string Name { get; private set; }
-    public string Description { get; private set; }
-    public bool IsActive { get; private set; }
-    public DateTime CreatedAt { get; private set; }
-
     public Category(string name, string description, bool isActive = true)
-        : base()
     {
         Name = name;
         Description = description;
@@ -23,6 +17,11 @@ public class Category : AggregateRoot
         CreatedAt = DateTime.Now;
         Validate();
     }
+
+    public string Name { get; private set; }
+    public string Description { get; private set; }
+    public bool IsActive { get; private set; }
+    public DateTime CreatedAt { get; private set; }
 
     public void Activate()
     {

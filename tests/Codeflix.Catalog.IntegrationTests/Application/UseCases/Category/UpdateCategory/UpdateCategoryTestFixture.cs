@@ -38,11 +38,13 @@ public class UpdateCategoryTestFixture : CategoryUseCaseBaseFixture
         return invalidInputShortName;
     }
 
-    public UpdateCategoryInput GetValidInput(Guid? id = null) =>
-        new(
+    public UpdateCategoryInput GetValidInput(Guid? id = null)
+    {
+        return new UpdateCategoryInput(
             id ?? Guid.NewGuid(),
             GetValidCategoryName(),
             GetValidCategoryDescription(),
             GetRandomBoolean()
         );
+    }
 }

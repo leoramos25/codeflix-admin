@@ -13,21 +13,18 @@ public class ListCategoriesTestFixture : CategoryUseCaseBaseFixture
     {
         var random = new Random();
         return new ListCategoriesInput(
-            page: random.Next(1, 10),
-            perPage: random.Next(10, 100),
-            search: Faker.Commerce.ProductName(),
-            sort: Faker.Commerce.ProductName(),
-            dir: Faker.PickRandom(SearchOrder.Asc, SearchOrder.Desc)
+            random.Next(1, 10),
+            random.Next(10, 100),
+            Faker.Commerce.ProductName(),
+            Faker.Commerce.ProductName(),
+            Faker.PickRandom(SearchOrder.Asc, SearchOrder.Desc)
         );
     }
 
     public List<Catalog.Domain.Entity.Category> GetCategories(int size = 10)
     {
         List<Catalog.Domain.Entity.Category> categories = [];
-        for (var i = 0; i < size; i++)
-        {
-            categories.Add(GetValidCategory());
-        }
+        for (var i = 0; i < size; i++) categories.Add(GetValidCategory());
 
         return categories;
     }

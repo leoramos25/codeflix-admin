@@ -2,7 +2,10 @@ namespace Codeflix.Catalog.Domain.SeedWork;
 
 public abstract class Entity
 {
-    public Guid Id { get; protected set; }
+    protected Entity()
+    {
+        Id = Guid.NewGuid();
+    }
 
-    protected Entity() => Id = Guid.NewGuid();
+    public Guid Id { get; protected set; }
 }

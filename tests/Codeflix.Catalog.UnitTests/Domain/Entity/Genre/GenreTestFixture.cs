@@ -19,5 +19,8 @@ public class GenreTestFixture : BaseFixture
         return genre;
     }
 
-    public bool GetRandomBoolean() => new Random().NextDouble() < 0.5;
+    public bool GetRandomBoolean()
+    {
+        return new Random().NextDouble() < 0.5;
+    }
 }

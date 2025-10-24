@@ -21,7 +21,7 @@
     environment:
       MYSQL_ROOT_PASSWORD: C0D3fl1X.@
       MYSQL_DATABASE: CatalogAdmin
-      
+  
   database-e2e:
     container_name: catalogdb-e2e
     hostname: catalogdb-e2e
@@ -31,7 +31,7 @@
     environment:
       MYSQL_ROOT_PASSWORD: C0D3fl1X.@
       MYSQL_DATABASE: CatalogAdmin
-      
+
 networks:
   default:
     name: catalog-admin

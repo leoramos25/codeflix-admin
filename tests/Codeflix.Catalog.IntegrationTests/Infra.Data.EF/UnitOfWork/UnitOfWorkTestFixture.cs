@@ -12,11 +12,15 @@ public class UnitOfWorkTestFixture : BaseFixture
     private const int CategoryNameMaxLength = 255;
     private const int CategoryDescriptionMaxLength = 10_000;
 
-    public List<Category> GetValidCategories(int size = 10) =>
-        Enumerable.Range(0, size).Select(_ => GetValidCategory()).ToList();
+    public List<Category> GetValidCategories(int size = 10)
+    {
+        return Enumerable.Range(0, size).Select(_ => GetValidCategory()).ToList();
+    }
 
-    public Category GetValidCategory() =>
-        new(GetValidCategoryName(), GetValidCategoryDescription(), GetRandomBoolean());
+    public Category GetValidCategory()
+    {
+        return new Category(GetValidCategoryName(), GetValidCategoryDescription(), GetRandomBoolean());
+    }
 
     public string GetValidCategoryName()
     {
@@ -36,5 +40,8 @@ public class UnitOfWorkTestFixture : BaseFixture
         return categoryDescription;
     }
 
-    public bool GetRandomBoolean() => new Random().NextDouble() < 0.5;
+    public bool GetRandomBoolean()
+    {
+        return new Random().NextDouble() < 0.5;
+    }
 }

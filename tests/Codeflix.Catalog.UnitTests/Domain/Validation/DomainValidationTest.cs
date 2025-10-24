@@ -7,7 +7,7 @@ namespace Codeflix.Catalog.UnitTests.Domain.Validation;
 
 public class DomainValidationTest
 {
-    private readonly Faker _faker = new Faker();
+    private readonly Faker _faker = new();
 
     [Fact(DisplayName = nameof(NotNullOk))]
     [Trait("Domain", "DomainValidation - Validation")]
@@ -62,7 +62,7 @@ public class DomainValidationTest
 
     [Theory(DisplayName = nameof(MinLengthOk))]
     [Trait("Domain", "DomainValidation - Validation")]
-    [MemberData(nameof(GetValuesGreaterThanMin), parameters: 10)]
+    [MemberData(nameof(GetValuesGreaterThanMin), 10)]
     public void MinLengthOk(string target, int minLength)
     {
         var fieldName = _faker.Commerce.ProductName().Replace(" ", "");
@@ -77,14 +77,14 @@ public class DomainValidationTest
         for (var i = 0; i < numberOfTests; i++)
         {
             var example = faker.Commerce.ProductName();
-            var minLength = example.Length - (new Random()).Next(1, 20);
+            var minLength = example.Length - new Random().Next(1, 20);
             yield return [example, minLength];
         }
     }
 
     [Theory(DisplayName = nameof(MinLengthThrowWhenLess))]
     [Trait("Domain", "DomainValidation - Validation")]
-    [MemberData(nameof(GetValuesSmallerThanMin), parameters: 10)]
+    [MemberData(nameof(GetValuesSmallerThanMin), 10)]
     public void MinLengthThrowWhenLess(string target, int minLength)
     {
         var fieldName = _faker.Commerce.ProductName().Replace(" ", "");
@@ -102,14 +102,14 @@ public class DomainValidationTest
         for (var i = 0; i < numberOfTests; i++)
         {
             var example = faker.Commerce.ProductName();
-            var minLength = example.Length + (new Random()).Next(1, 20);
+            var minLength = example.Length + new Random().Next(1, 20);
             yield return [example, minLength];
         }
     }
 
     [Theory(DisplayName = nameof(MaxLengthOk))]
     [Trait("Domain", "DomainValidation - Validation")]
-    [MemberData(nameof(GetValuesLessThanMax), parameters: 10)]
+    [MemberData(nameof(GetValuesLessThanMax), 10)]
     public void MaxLengthOk(string target, int maxLength)
     {
         var fieldName = _faker.Commerce.ProductName().Replace(" ", "");
@@ -124,14 +124,14 @@ public class DomainValidationTest
         for (var i = 0; i < numberOfTests; i++)
         {
             var example = faker.Commerce.ProductName();
-            var maxLength = example.Length + (new Random()).Next(1, 5);
+            var maxLength = example.Length + new Random().Next(1, 5);
             yield return [example, maxLength];
         }
     }
 
     [Theory(DisplayName = nameof(MaxLengthThrowWhenGreater))]
     [Trait("Domain", "DomainValidation - Validation")]
-    [MemberData(nameof(GetValuesGreaterThanMax), parameters: 10)]
+    [MemberData(nameof(GetValuesGreaterThanMax), 10)]
     public void MaxLengthThrowWhenGreater(string target, int maxLength)
     {
         var fieldName = _faker.Commerce.ProductName().Replace(" ", "");
@@ -149,7 +149,7 @@ public class DomainValidationTest
         for (var i = 0; i < numberOfTests; i++)
         {
             var example = faker.Commerce.ProductName();
-            var maxLength = example.Length - (new Random()).Next(1, 5);
+            var maxLength = example.Length - new Random().Next(1, 5);
             yield return [example, maxLength];
         }
     }

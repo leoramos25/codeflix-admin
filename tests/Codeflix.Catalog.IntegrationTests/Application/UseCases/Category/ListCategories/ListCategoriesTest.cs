@@ -123,7 +123,7 @@ public class ListCategoriesTest(ListCategoriesTestFixture fixture)
                 "Sci-Fi IA",
                 "Sci-Fi Robots",
                 "Sci-Fi Space",
-                "Sci-Fi Future",
+                "Sci-Fi Future"
             ]
         );
         await dbContext.Categories.AddRangeAsync(categories, CancellationToken.None);

@@ -6,4 +6,6 @@ namespace Codeflix.Catalog.EndToEndTests.Api.Category.DeleteCategory;
 public class DeleteCategoryApiTestFixtureCollection
     : ICollectionFixture<DeleteCategoryApiTestFixture>;
 
-public class DeleteCategoryApiTestFixture : CategoryBaseFixture { }
+public class DeleteCategoryApiTestFixture : CategoryBaseFixture
+{
+}

@@ -13,6 +13,12 @@ public class GenreUseCaseBaseFixture : BaseFixture
 
     public Mock<ICategoryRepository> GetCategoryRepository() => new();
 
+    public List<Catalog.Domain.Entity.Genre> GetValidGenres(int size = 10) =>
+        Enumerable
+            .Range(1, size)
+            .Select(_ => GetValidGenreWithCategories(new Random().Next(1, 4)))
+            .ToList();
+
     public Catalog.Domain.Entity.Genre GetValidGenreWithCategories(int categoriesSize)
     {
         var genre = GetValidGenre();

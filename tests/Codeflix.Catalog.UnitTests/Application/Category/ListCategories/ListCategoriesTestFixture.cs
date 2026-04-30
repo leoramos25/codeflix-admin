@@ -24,7 +24,8 @@ public class ListCategoriesTestFixture : CategoryUseCaseBaseFixture
     public List<Catalog.Domain.Entity.Category> GetCategories(int size = 10)
     {
         List<Catalog.Domain.Entity.Category> categories = [];
-        for (var i = 0; i < size; i++) categories.Add(GetValidCategory());
+        for (var i = 0; i < size; i++)
+            categories.Add(GetValidCategory());
 
         return categories;
     }

@@ -26,9 +26,10 @@ public class CreateCategoryApiTestDataGenerator
                 case 2:
                     var invalidInputDescriptionLongName = fixture.GetInvalidInputDescriptionLong();
                     input.Description = invalidInputDescriptionLongName;
-                    invalidInputs.Add(
-                        [input, "Description should be less or equal 10000 characters long"]
-                    );
+                    invalidInputs.Add([
+                        input,
+                        "Description should be less or equal 10000 characters long",
+                    ]);
                     break;
                 case 3:
                     input.Name = " ";

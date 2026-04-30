@@ -37,7 +37,11 @@ public class BaseFixture
 
     public Category GetValidCategory()
     {
-        return new Category(GetValidCategoryName(), GetValidCategoryDescription(), GetRandomBoolean());
+        return new Category(
+            GetValidCategoryName(),
+            GetValidCategoryDescription(),
+            GetRandomBoolean()
+        );
     }
 
     public string GetValidCategoryName()

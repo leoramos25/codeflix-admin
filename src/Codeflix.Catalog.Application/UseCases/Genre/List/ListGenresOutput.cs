@@ -10,7 +10,5 @@ public class ListGenresOutput : PaginatedListOutput<ListGenresItemOutput>
         int total,
         IReadOnlyList<ListGenresItemOutput> items
     )
-        : base(page, perPage, total, items)
-    {
-    }
+        : base(page, perPage, total, items) { }
 }

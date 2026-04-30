@@ -1,6 +1,7 @@
 namespace Codeflix.Catalog.Domain.SeedWork.SearchableRepository;
 
-public class SearchOutput<TAggregate> where TAggregate : AggregateRoot
+public class SearchOutput<TAggregate>
+    where TAggregate : AggregateRoot
 {
     public SearchOutput(int currentPage, int perPage, int total, IReadOnlyList<TAggregate> items)
     {

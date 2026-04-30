@@ -3,13 +3,9 @@
 public class TestApiResponseList<TOutputItem> : TestApiResponse<List<TOutputItem>>
 {
     public TestApiResponseList(List<TOutputItem> data)
-        : base(data)
-    {
-    }
+        : base(data) { }
 
-    public TestApiResponseList()
-    {
-    }
+    public TestApiResponseList() { }
 
     public TestApiResponseList(List<TOutputItem> data, TestApiResponseListMeta meta)
         : base(data)
@@ -22,9 +18,7 @@ public class TestApiResponseList<TOutputItem> : TestApiResponse<List<TOutputItem
 
 public class TestApiResponseListMeta
 {
-    public TestApiResponseListMeta()
-    {
-    }
+    public TestApiResponseListMeta() { }
 
     public TestApiResponseListMeta(int currentPage, int perPage, int total)
     {
@@ -40,9 +34,7 @@ public class TestApiResponseListMeta
 
 public class TestApiResponse<TOutput>
 {
-    public TestApiResponse()
-    {
-    }
+    public TestApiResponse() { }
 
     public TestApiResponse(TOutput data)
     {

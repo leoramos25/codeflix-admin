@@ -159,7 +159,7 @@ public class CategoryTest(CategoryTestFixture fixture)
         var newData = new
         {
             Name = fixture.GetValidCategoryName(),
-            Description = fixture.GetValidCategoryDescription()
+            Description = fixture.GetValidCategoryDescription(),
         };
 
         category.Update(newData.Name, newData.Description);

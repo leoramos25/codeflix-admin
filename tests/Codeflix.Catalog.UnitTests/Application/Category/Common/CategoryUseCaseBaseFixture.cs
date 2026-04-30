@@ -23,8 +23,11 @@ public abstract class CategoryUseCaseBaseFixture : BaseFixture
 
     public Catalog.Domain.Entity.Category GetValidCategory()
     {
-        return new Catalog.Domain.Entity.Category(GetValidCategoryName(), GetValidCategoryDescription(),
-            GetRandomBoolean());
+        return new Catalog.Domain.Entity.Category(
+            GetValidCategoryName(),
+            GetValidCategoryDescription(),
+            GetRandomBoolean()
+        );
     }
 
     public string GetValidCategoryName()

@@ -151,19 +151,17 @@ public class ListCategoriesApiTest(ListCategoriesApiTestFixture fixture) : IDisp
     )
     {
         var input = new ListCategoriesInput(page, perPage, search);
-        var categories = fixture.GetValidCategoriesWithNames(
-            [
-                "Action",
-                "Horror",
-                "Horror - Robots",
-                "Horror - Based On Real Facts",
-                "Drama",
-                "Sci-Fi IA",
-                "Sci-Fi Robots",
-                "Sci-Fi Space",
-                "Sci-Fi Future"
-            ]
-        );
+        var categories = fixture.GetValidCategoriesWithNames([
+            "Action",
+            "Horror",
+            "Horror - Robots",
+            "Horror - Based On Real Facts",
+            "Drama",
+            "Sci-Fi IA",
+            "Sci-Fi Robots",
+            "Sci-Fi Space",
+            "Sci-Fi Future",
+        ]);
         await fixture.Persistence.InsertList(categories, CancellationToken.None);
 
         var (response, output) = await fixture.ApiClient.Get<
@@ -202,13 +200,7 @@ public class ListCategoriesApiTest(ListCategoriesApiTestFixture fixture) : IDisp
         var searchOrder = order.Equals("asc", StringComparison.CurrentCultureIgnoreCase)
             ? SearchOrder.Asc
             : SearchOrder.Desc;
-        var input = new ListCategoriesInput(
-            1,
-            20,
-            "",
-            orderBy,
-            searchOrder
-        );
+        var input = new ListCategoriesInput(1, 20, "", orderBy, searchOrder);
         var categories = fixture.GetValidCategories();
         await fixture.Persistence.InsertList(categories, CancellationToken.None);
 

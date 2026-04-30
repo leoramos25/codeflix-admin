@@ -17,7 +17,11 @@ public class CategoryBaseFixture : BaseFixture
 
     public Domain.Entity.Category GetValidCategory()
     {
-        return new Domain.Entity.Category(GetValidCategoryName(), GetValidCategoryDescription(), GetRandomBoolean());
+        return new Domain.Entity.Category(
+            GetValidCategoryName(),
+            GetValidCategoryDescription(),
+            GetRandomBoolean()
+        );
     }
 
     public string GetInvalidInputDescriptionLong()

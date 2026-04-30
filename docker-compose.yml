@@ -31,8 +31,3 @@
     environment:
       MYSQL_ROOT_PASSWORD: C0D3fl1X.@
       MYSQL_DATABASE: CatalogAdmin
-
-networks:
-  default:
-    name: catalog-admin
-    external: true

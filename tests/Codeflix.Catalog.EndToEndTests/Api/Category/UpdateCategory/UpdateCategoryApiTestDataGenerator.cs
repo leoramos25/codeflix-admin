@@ -14,27 +14,27 @@ public class UpdateCategoryApiTestDataGenerator
                 case 0:
                     var invalidInputShortName = fixture.GetValidInput();
                     invalidInputShortName.Name = fixture.GetInvalidInputShortName();
-                    invalidInputs.Add(
-                        [invalidInputShortName, "Name should be at least 3 characters long"]
-                    );
+                    invalidInputs.Add([
+                        invalidInputShortName,
+                        "Name should be at least 3 characters long",
+                    ]);
                     break;
                 case 1:
                     var invalidInputLongName = fixture.GetValidInput();
                     invalidInputLongName.Name = fixture.GetInvalidInputLongName();
-                    invalidInputs.Add(
-                        [invalidInputLongName, "Name should be less or equal 255 characters long"]
-                    );
+                    invalidInputs.Add([
+                        invalidInputLongName,
+                        "Name should be less or equal 255 characters long",
+                    ]);
                     break;
                 case 2:
                     var invalidInputDescriptionLongName = fixture.GetValidInput();
                     invalidInputDescriptionLongName.Description =
                         fixture.GetInvalidInputDescriptionLong();
-                    invalidInputs.Add(
-                        [
-                            invalidInputDescriptionLongName,
-                            "Description should be less or equal 10000 characters long"
-                        ]
-                    );
+                    invalidInputs.Add([
+                        invalidInputDescriptionLongName,
+                        "Description should be less or equal 10000 characters long",
+                    ]);
                     break;
             }
 

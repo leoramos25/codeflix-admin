@@ -29,7 +29,7 @@ public class GetCategoryApiTest(GetCategoryApiTestFixture fixture)
         output.Data.Name.Should().Be(category.Name);
         output.Data.Description.Should().Be(category.Description);
         output.Data.IsActive.Should().Be(category.IsActive);
-        output.Data.CreatedAt.Should().Be(category.CreatedAt);
+        output.Data.CreatedAt.Should().BeSameDateAs(category.CreatedAt);
     }
 
     [Fact(DisplayName = nameof(ThrowWhenCategoryNotFound))]

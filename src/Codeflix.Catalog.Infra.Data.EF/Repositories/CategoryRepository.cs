@@ -17,10 +17,7 @@ public class CategoryRepository(CodeflixCatalogDbContext context) : ICategoryRep
 
     public async Task<Category> Get(Guid id, CancellationToken cancellationToken)
     {
-        var category = await _categories.FindAsync(
-            [id, cancellationToken],
-            cancellationToken
-        );
+        var category = await _categories.FindAsync([id, cancellationToken], cancellationToken);
         NotFoundException.ThrowIfNull(category, $"Category '{id}' not found.");
         return category!;
     }
@@ -72,7 +69,7 @@ public class CategoryRepository(CodeflixCatalogDbContext context) : ICategoryRep
             ("id", SearchOrder.Desc) => query.OrderByDescending(x => x.Id),
             ("createdat", SearchOrder.Asc) => query.OrderBy(x => x.CreatedAt),
             ("createdat", SearchOrder.Desc) => query.OrderByDescending(x => x.CreatedAt),
-            _ => query.OrderBy(x => x.Name)
+            _ => query.OrderBy(x => x.Name),
         };
         return orderedQuery.ThenBy(x => x.Id);
     }

@@ -1,5 +1,3 @@
 namespace Codeflix.Catalog.Domain.SeedWork;
 
-public abstract class AggregateRoot : Entity
-{
-}
+public abstract class AggregateRoot : Entity { }

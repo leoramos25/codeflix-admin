@@ -11,6 +11,10 @@ public class UpdateCategoryApiTestFixture : CategoryBaseFixture
 {
     public UpdateCategoryApiInput GetValidInput()
     {
-        return new UpdateCategoryApiInput(GetValidCategoryName(), GetValidCategoryDescription(), GetRandomBoolean());
+        return new UpdateCategoryApiInput(
+            GetValidCategoryName(),
+            GetValidCategoryDescription(),
+            GetRandomBoolean()
+        );
     }
 }

@@ -7,9 +7,7 @@ namespace Codeflix.Catalog.Application.UseCases.Category.List;
 public class ListCategoriesInput : PaginatedListInput, IRequest<ListCategoriesOutput>
 {
     public ListCategoriesInput()
-        : base(1, 15, "", "", SearchOrder.Asc)
-    {
-    }
+        : base(1, 15, "", "", SearchOrder.Asc) { }
 
     public ListCategoriesInput(
         int page = 1,
@@ -18,7 +16,5 @@ public class ListCategoriesInput : PaginatedListInput, IRequest<ListCategoriesOu
         string sort = "",
         SearchOrder dir = SearchOrder.Asc
     )
-        : base(page, perPage, search, sort, dir)
-    {
-    }
+        : base(page, perPage, search, sort, dir) { }
 }

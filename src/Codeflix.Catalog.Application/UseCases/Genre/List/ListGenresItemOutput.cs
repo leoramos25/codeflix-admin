@@ -10,6 +10,12 @@ public record ListGenresItemOutput(
 {
     public static ListGenresItemOutput FromGenre(Domain.Entity.Genre genre)
     {
-        return new ListGenresItemOutput(genre.Id, genre.Name, genre.IsActive, genre.Categories, genre.CreatedAt);
+        return new ListGenresItemOutput(
+            genre.Id,
+            genre.Name,
+            genre.IsActive,
+            genre.Categories,
+            genre.CreatedAt
+        );
     }
 }

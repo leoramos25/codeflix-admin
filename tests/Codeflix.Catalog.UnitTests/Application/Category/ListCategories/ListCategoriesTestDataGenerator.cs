@@ -31,7 +31,7 @@ public class ListCategoriesTestDataGenerator
                             input.PerPage,
                             input.Search,
                             input.Sort
-                        )
+                        ),
                     ];
                     break;
                 case 5:

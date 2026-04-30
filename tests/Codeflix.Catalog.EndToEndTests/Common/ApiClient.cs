@@ -11,7 +11,7 @@ public class ApiClient(HttpClient httpClient)
     private readonly JsonSerializerOptions _defaultJsonSerializerOptions = new()
     {
         PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
-        PropertyNameCaseInsensitive = true
+        PropertyNameCaseInsensitive = true,
     };
 
     public async Task<(HttpResponseMessage, TOutput?)> Post<TOutput>(

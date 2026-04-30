@@ -10,7 +10,5 @@ public class ListCategoriesOutput : PaginatedListOutput<ListCategoriesItemOutput
         int total,
         IReadOnlyList<ListCategoriesItemOutput> items
     )
-        : base(page, perPage, total, items)
-    {
-    }
+        : base(page, perPage, total, items) { }
 }

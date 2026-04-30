@@ -113,19 +113,17 @@ public class ListCategoriesTest(ListCategoriesTestFixture fixture)
     )
     {
         var dbContext = fixture.CreateDbContext();
-        var categories = fixture.GetValidCategoriesWithNames(
-            [
-                "Action",
-                "Horror",
-                "Horror - Robots",
-                "Horror - Based On Real Facts",
-                "Drama",
-                "Sci-Fi IA",
-                "Sci-Fi Robots",
-                "Sci-Fi Space",
-                "Sci-Fi Future"
-            ]
-        );
+        var categories = fixture.GetValidCategoriesWithNames([
+            "Action",
+            "Horror",
+            "Horror - Robots",
+            "Horror - Based On Real Facts",
+            "Drama",
+            "Sci-Fi IA",
+            "Sci-Fi Robots",
+            "Sci-Fi Space",
+            "Sci-Fi Future",
+        ]);
         await dbContext.Categories.AddRangeAsync(categories, CancellationToken.None);
         await dbContext.SaveChangesAsync(CancellationToken.None);
         var categoryRepository = new CategoryRepository(fixture.CreateDbContext(true));

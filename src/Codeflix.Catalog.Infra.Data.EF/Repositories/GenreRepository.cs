@@ -28,7 +28,7 @@ public class GenreRepository(CodeflixCatalogDbContext context) : IGenreRepositor
     public async Task<Genre> Get(Guid id, CancellationToken cancellationToken)
     {
         var genre = await _genres.FindAsync([id], cancellationToken);
-        NotFoundException.ThrowIfNull(genre, $"Genre '{id}' not found");
+        NotFoundException.ThrowIfNull(genre, $"Genre '{id}' not found.");
         var genreCategories = await _genresCategories
             .AsNoTracking()
             .Where(relation => relation.GenreId == id)

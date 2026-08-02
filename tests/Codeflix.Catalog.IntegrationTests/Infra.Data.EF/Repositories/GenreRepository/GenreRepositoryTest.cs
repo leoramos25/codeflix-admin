@@ -107,7 +107,7 @@ public class GenreRepositoryTest(GenreRepositoryTestFixture fixture)
         await action
             .Should()
             .ThrowAsync<NotFoundException>()
-            .WithMessage($"Genre '{invalidId}' not found");
+            .WithMessage($"Genre '{invalidId}' not found.");
     }
 
     [Fact(DisplayName = nameof(DeleteGenre))]

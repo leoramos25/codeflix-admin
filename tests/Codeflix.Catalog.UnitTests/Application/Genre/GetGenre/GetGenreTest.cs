@@ -27,7 +27,7 @@ public class GetGenreTest(GetGenreTestFixture fixture)
         output.Name.Should().Be(genre.Name);
         output.IsActive.Should().Be(genre.IsActive);
         output.Categories.Should().HaveCount(genre.Categories.Count);
-        output.Categories.Should().BeEquivalentTo(genre.Categories);
+        output.Categories.Select(category => category.Id).Should().BeEquivalentTo(genre.Categories);
         output.CreatedAt.Should().BeSameDateAs(genre.CreatedAt);
         genreRepository.Verify(
             repo => repo.Get(It.Is<Guid>(x => x == genre.Id), It.IsAny<CancellationToken>()),

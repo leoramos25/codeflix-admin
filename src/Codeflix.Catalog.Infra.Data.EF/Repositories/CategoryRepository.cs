@@ -47,12 +47,16 @@ public class CategoryRepository(CodeflixCatalogDbContext context) : ICategoryRep
         return new SearchOutput<Category>(input.Page, input.PerPage, total, items);
     }
 
-    public Task<IReadOnlyCollection<Guid>> ListIdsByIds(
+    public async Task<IReadOnlyCollection<Guid>> ListIdsByIds(
         List<Guid> ids,
         CancellationToken cancellationToken
     )
     {
-        throw new NotImplementedException();
+        return await _categories
+            .AsNoTracking()
+            .Where(category => ids.Contains(category.Id))
+            .Select(category => category.Id)
+            .ToListAsync(cancellationToken);
     }
 
     private static IQueryable<Category> AddOrderToQuery(

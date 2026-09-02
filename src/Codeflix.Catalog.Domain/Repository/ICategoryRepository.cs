@@ -10,4 +10,9 @@ public interface ICategoryRepository : IGenericRepository<Category>, ISearchable
         List<Guid> ids,
         CancellationToken cancellationToken
     );
+
+    Task<IReadOnlyCollection<Category>> ListByIds(
+        List<Guid> ids,
+        CancellationToken cancellationToken
+    );
 }

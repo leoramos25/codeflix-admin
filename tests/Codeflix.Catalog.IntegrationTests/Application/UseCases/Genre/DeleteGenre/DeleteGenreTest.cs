@@ -62,7 +62,8 @@ public class DeleteGenreTest(DeleteGenreTestFixture fixture)
         var assertDbContext = fixture.CreateDbContext(true);
         var deletedGenre = await assertDbContext.Genres.FindAsync(genre.Id, CancellationToken.None);
         var deletedGenresCategories = await assertDbContext
-            .GenresCategories.Where(genreCategory => genreCategory.GenreId == genre.Id)
+            .GenresCategories.AsNoTracking()
+            .Where(genreCategory => genreCategory.GenreId == genre.Id)
             .ToListAsync(CancellationToken.None);
         deletedGenre.Should().BeNull();
         deletedGenresCategories.Should().BeEmpty();

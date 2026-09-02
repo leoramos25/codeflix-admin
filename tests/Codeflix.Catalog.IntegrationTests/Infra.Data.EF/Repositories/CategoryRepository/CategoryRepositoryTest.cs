@@ -1,4 +1,5 @@
 using Codeflix.Catalog.Application.Exceptions;
+using Codeflix.Catalog.Domain.Entity;
 using Codeflix.Catalog.Domain.SeedWork.SearchableRepository;
 using FluentAssertions;
 using Context = Codeflix.Catalog.Infra.Data.EF.Repositories;
@@ -302,6 +303,44 @@ public class CategoryRepositoryTest(CategoryRepositoryTestFixture fixture)
             outputItem.Description.Should().Be(expectedItem.Description);
             outputItem.IsActive.Should().Be(expectedItem.IsActive);
             outputItem.CreatedAt.Should().BeSameDateAs(expectedItem.CreatedAt);
+        }
+    }
+
+    [Fact(DisplayName = nameof(ListByIds))]
+    [Trait("Integration/Infra.Data", "CategoryRepository - Repositories")]
+    public async Task ListByIds()
+    {
+        var dbContext = fixture.CreateDbContext();
+        var categories = fixture.GetValidCategories(15);
+        var categoryIds = Enumerable
+            .Range(1, 3)
+            .Select(_ =>
+            {
+                var indexToGet = new Random().Next(0, categories.Count - 1);
+                return categories[indexToGet];
+            })
+            .Select(x => x.Id)
+            .Distinct()
+            .ToList();
+        await dbContext.Categories.AddRangeAsync(categories, CancellationToken.None);
+        await dbContext.SaveChangesAsync(CancellationToken.None);
+        var categoryRepository = new Context.CategoryRepository(fixture.CreateDbContext(true));
+
+        IReadOnlyCollection<Category> output = await categoryRepository.ListByIds(
+            categoryIds,
+            CancellationToken.None
+        );
+
+        output.Should().NotBeEmpty();
+        output.Should().HaveCount(categoryIds.Count);
+        foreach (var item in output)
+        {
+            var category = categories.Find(c => c.Id == item.Id);
+            category.Should().NotBeNull();
+            item.Name.Should().Be(category.Name);
+            item.Description.Should().Be(category.Description);
+            item.IsActive.Should().Be(category.IsActive);
+            item.CreatedAt.Should().BeSameDateAs(category.CreatedAt);
         }
     }
 }

@@ -13,6 +13,7 @@ public class ListGenresTest(ListGenresTestFixture fixture)
     public async Task ListGenres()
     {
         var genreRepository = fixture.GetGenreRepository();
+        var categoryRepository = fixture.GetCategoryRepository();
         var genres = fixture.GetValidGenres();
         var input = fixture.GetValidInput();
         var searchOutput = new SearchOutput<Catalog.Domain.Entity.Genre>(
@@ -25,7 +26,8 @@ public class ListGenresTest(ListGenresTestFixture fixture)
             .Setup(repo => repo.Search(It.IsAny<SearchInput>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(searchOutput);
         var useCase = new Catalog.Application.UseCases.Genre.List.ListGenres(
-            genreRepository.Object
+            genreRepository.Object,
+            categoryRepository.Object
         );
 
         var output = await useCase.Handle(input, CancellationToken.None);
@@ -57,6 +59,18 @@ public class ListGenresTest(ListGenresTestFixture fixture)
                 ),
             Times.Once
         );
+        var expectedIds = genres.SelectMany(genre => genre.Categories).Distinct().ToList();
+        categoryRepository.Verify(
+            repo =>
+                repo.ListByIds(
+                    It.Is<List<Guid>>(parameterIds =>
+                        expectedIds.All(id => parameterIds.Contains(id))
+                        && expectedIds.Count == parameterIds.Count
+                    ),
+                    It.IsAny<CancellationToken>()
+                ),
+            Times.Once
+        );
     }
 
     [Fact(DisplayName = nameof(ListEmpty))]
@@ -64,6 +78,7 @@ public class ListGenresTest(ListGenresTestFixture fixture)
     public async Task ListEmpty()
     {
         var genreRepository = fixture.GetGenreRepository();
+        var categoryRepository = fixture.GetCategoryRepository();
         var input = fixture.GetValidInput();
         var searchOutput = new SearchOutput<Catalog.Domain.Entity.Genre>(
             input.Page,
@@ -75,7 +90,8 @@ public class ListGenresTest(ListGenresTestFixture fixture)
             .Setup(repo => repo.Search(It.IsAny<SearchInput>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(searchOutput);
         var useCase = new Catalog.Application.UseCases.Genre.List.ListGenres(
-            genreRepository.Object
+            genreRepository.Object,
+            categoryRepository.Object
         );
 
         var output = await useCase.Handle(input, CancellationToken.None);
@@ -100,6 +116,10 @@ public class ListGenresTest(ListGenresTestFixture fixture)
                 ),
             Times.Once
         );
+        categoryRepository.Verify(
+            repo => repo.ListByIds(It.IsAny<List<Guid>>(), It.IsAny<CancellationToken>()),
+            Times.Never
+        );
     }
 
     [Fact(DisplayName = nameof(ListUsingInputDefaultValues))]
@@ -107,6 +127,7 @@ public class ListGenresTest(ListGenresTestFixture fixture)
     public async Task ListUsingInputDefaultValues()
     {
         var genreRepository = fixture.GetGenreRepository();
+        var categoryRepository = fixture.GetCategoryRepository();
         var input = new ListGenresInput();
         var genres = fixture.GetValidGenres(input.PerPage);
         var searchOutput = new SearchOutput<Catalog.Domain.Entity.Genre>(
@@ -119,7 +140,8 @@ public class ListGenresTest(ListGenresTestFixture fixture)
             .Setup(repo => repo.Search(It.IsAny<SearchInput>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(searchOutput);
         var useCase = new Catalog.Application.UseCases.Genre.List.ListGenres(
-            genreRepository.Object
+            genreRepository.Object,
+            categoryRepository.Object
         );
 
         await useCase.Handle(input, CancellationToken.None);
@@ -133,6 +155,18 @@ public class ListGenresTest(ListGenresTestFixture fixture)
                         && searchInput.Search == ""
                         && searchInput.OrderBy == ""
                         && searchInput.Order == SearchOrder.Asc
+                    ),
+                    It.IsAny<CancellationToken>()
+                ),
+            Times.Once
+        );
+        var expectedIds = genres.SelectMany(genre => genre.Categories).Distinct().ToList();
+        categoryRepository.Verify(
+            repo =>
+                repo.ListByIds(
+                    It.Is<List<Guid>>(parameterIds =>
+                        expectedIds.All(id => parameterIds.Contains(id))
+                        && expectedIds.Count == parameterIds.Count
                     ),
                     It.IsAny<CancellationToken>()
                 ),

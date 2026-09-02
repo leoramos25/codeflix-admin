@@ -2,7 +2,8 @@ using Codeflix.Catalog.Domain.Repository;
 
 namespace Codeflix.Catalog.Application.UseCases.Genre.List;
 
-public class ListGenres(IGenreRepository genreRepository) : IListGenres
+public class ListGenres(IGenreRepository genreRepository, ICategoryRepository categoryRepository)
+    : IListGenres
 {
     public async Task<ListGenresOutput> Handle(
         ListGenresInput request,
@@ -10,11 +11,19 @@ public class ListGenres(IGenreRepository genreRepository) : IListGenres
     )
     {
         var searchOutput = await genreRepository.Search(request.ToSearchInput(), cancellationToken);
-        return new ListGenresOutput(
-            request.Page,
-            searchOutput.PerPage,
-            searchOutput.Total,
-            searchOutput.Items.Select(ListGenresItemOutput.FromGenre).ToList()
-        );
+        var output = ListGenresOutput.FromSearchOutput(searchOutput);
+        var relatedCategoryIds = searchOutput
+            .Items.SelectMany(x => x.Categories)
+            .Distinct()
+            .ToList();
+        if (relatedCategoryIds.Count > 0)
+        {
+            var categories = await categoryRepository.ListByIds(
+                relatedCategoryIds,
+                cancellationToken
+            );
+            output.FillCategoriesWithName(categories);
+        }
+        return output;
     }
 }

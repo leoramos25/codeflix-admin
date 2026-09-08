@@ -2,7 +2,8 @@ using Codeflix.Catalog.Domain.Repository;
 
 namespace Codeflix.Catalog.Application.UseCases.Genre.Get;
 
-public class GetGenre(IGenreRepository genreRepository) : IGetGenre
+public class GetGenre(IGenreRepository genreRepository, ICategoryRepository categoryRepository)
+    : IGetGenre
 {
     public async Task<GetGenreOutput> Handle(
         GetGenreInput request,
@@ -10,6 +11,15 @@ public class GetGenre(IGenreRepository genreRepository) : IGetGenre
     )
     {
         var genre = await genreRepository.Get(request.Id, cancellationToken);
-        return GetGenreOutput.FromGenre(genre);
+        var output = GetGenreOutput.FromGenre(genre);
+        if (genre.Categories.Count > 0)
+        {
+            var categories = await categoryRepository.ListByIds(
+                [.. genre.Categories],
+                cancellationToken
+            );
+            output.FillCategoriesWithName(categories);
+        }
+        return output;
     }
 }

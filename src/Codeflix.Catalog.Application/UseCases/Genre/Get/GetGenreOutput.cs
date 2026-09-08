@@ -1,3 +1,5 @@
+using DomainEntity = Codeflix.Catalog.Domain.Entity;
+
 namespace Codeflix.Catalog.Application.UseCases.Genre.Get;
 
 public record GetGenreOutput(
@@ -8,7 +10,7 @@ public record GetGenreOutput(
     DateTime CreatedAt
 )
 {
-    public static GetGenreOutput FromGenre(Domain.Entity.Genre genre)
+    public static GetGenreOutput FromGenre(DomainEntity.Genre genre)
     {
         return new GetGenreOutput(
             genre.Id,
@@ -18,10 +20,20 @@ public record GetGenreOutput(
             genre.CreatedAt
         );
     }
+
+    public void FillCategoriesWithName(IReadOnlyCollection<DomainEntity.Category> categories)
+    {
+        foreach (var categoryOutput in Categories)
+        {
+            categoryOutput.Name = categories
+                ?.FirstOrDefault(category => category.Id == categoryOutput.Id)
+                ?.Name;
+        }
+    }
 }
 
-public record GetGenreCategoryOutput(Guid Id, string? Name = null)
+public class GetGenreCategoryOutput(Guid id, string? name = null)
 {
-    public static GetGenreCategoryOutput Create(Guid id, string? name) =>
-        new GetGenreCategoryOutput(id, name);
-};
+    public Guid Id { get; set; } = id;
+    public string? Name { get; set; } = name;
+}

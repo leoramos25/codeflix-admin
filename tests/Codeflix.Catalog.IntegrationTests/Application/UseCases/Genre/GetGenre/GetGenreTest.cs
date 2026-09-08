@@ -17,8 +17,11 @@ public class GetGenreTest(GetGenreTestFixture fixture)
         var genre = fixture.GetValidGenre();
         await dbContext.Genres.AddAsync(genre, CancellationToken.None);
         await dbContext.SaveChangesAsync(CancellationToken.None);
-        var repository = new GenreRepository(fixture.CreateDbContext(true));
-        var useCase = new UseCase.GetGenre(repository);
+        var actDbContext = fixture.CreateDbContext(true);
+        var useCase = new UseCase.GetGenre(
+            new GenreRepository(actDbContext),
+            new CategoryRepository(actDbContext)
+        );
         var input = new UseCase.GetGenreInput(genre.Id);
 
         var output = await useCase.Handle(input, CancellationToken.None);
@@ -43,8 +46,11 @@ public class GetGenreTest(GetGenreTestFixture fixture)
         var genreCategories = categories.Select(c => new GenresCategories(genre.Id, c.Id));
         await dbContext.GenresCategories.AddRangeAsync(genreCategories, CancellationToken.None);
         await dbContext.SaveChangesAsync(CancellationToken.None);
-        var repository = new GenreRepository(fixture.CreateDbContext(true));
-        var useCase = new UseCase.GetGenre(repository);
+        var actDbContext = fixture.CreateDbContext(true);
+        var useCase = new UseCase.GetGenre(
+            new GenreRepository(actDbContext),
+            new CategoryRepository(actDbContext)
+        );
         var input = new UseCase.GetGenreInput(genre.Id);
 
         var output = await useCase.Handle(input, CancellationToken.None);
@@ -59,7 +65,14 @@ public class GetGenreTest(GetGenreTestFixture fixture)
             .Categories.Select(category => category.Id)
             .Should()
             .BeEquivalentTo(categories.Select(c => c.Id));
-        output.Categories.Select(category => category.Name).Should().AllBe(null);
+        output
+            .Categories.ToList()
+            .ForEach(categoryOutput =>
+            {
+                var category = categories.Find(category => category.Id == categoryOutput.Id);
+                category.Should().NotBeNull();
+                categoryOutput.Name.Should().Be(category.Name);
+            });
     }
 
     [Fact(DisplayName = nameof(ThrowExceptionWhenGenreNotFound))]
@@ -67,8 +80,11 @@ public class GetGenreTest(GetGenreTestFixture fixture)
     public async Task ThrowExceptionWhenGenreNotFound()
     {
         var invalidId = Guid.NewGuid();
-        var repository = new GenreRepository(fixture.CreateDbContext());
-        var useCase = new UseCase.GetGenre(repository);
+        var dbContext = fixture.CreateDbContext();
+        var useCase = new UseCase.GetGenre(
+            new GenreRepository(dbContext),
+            new CategoryRepository(dbContext)
+        );
         var input = new UseCase.GetGenreInput(invalidId);
 
         var action = () => useCase.Handle(input, CancellationToken.None);

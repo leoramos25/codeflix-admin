@@ -60,10 +60,19 @@ public class GetGenreApiTest(GetGenreApiTestFixture fixture)
         output.Data.Name.Should().Be(genre.Name);
         output.Data.IsActive.Should().Be(genre.IsActive);
         output.Data.CreatedAt.Should().BeSameDateAs(genre.CreatedAt);
+        output.Data.Categories.Should().HaveCount(categories.Count);
         output
             .Data.Categories.Select(relation => relation.Id)
             .Should()
             .BeEquivalentTo(categories.Select(category => category.Id));
+        output
+            .Data.Categories.ToList()
+            .ForEach(categoryOutput =>
+            {
+                var category = categories.Find(category => category.Id == categoryOutput.Id);
+                category.Should().NotBeNull();
+                categoryOutput.Name.Should().Be(category.Name);
+            });
     }
 
     [Fact(DisplayName = nameof(ThrowWhenGenreNotFound))]

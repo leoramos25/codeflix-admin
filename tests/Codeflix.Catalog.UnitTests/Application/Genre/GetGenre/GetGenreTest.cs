@@ -13,11 +13,21 @@ public class GetGenreTest(GetGenreTestFixture fixture)
     public async Task GetGenre()
     {
         var genreRepository = fixture.GetGenreRepository();
-        var genre = fixture.GetValidGenreWithCategories(3);
+        var categoryRepository = fixture.GetCategoryRepository();
+        var categories = fixture.GetValidCategories(3);
+        var genre = fixture.GetValidGenreWithCategories(
+            [.. categories.Select(category => category.Id)]
+        );
         genreRepository
             .Setup(repo => repo.Get(It.Is<Guid>(x => x == genre.Id), It.IsAny<CancellationToken>()))
             .ReturnsAsync(genre);
-        var useCase = new Catalog.Application.UseCases.Genre.Get.GetGenre(genreRepository.Object);
+        categoryRepository
+            .Setup(repo => repo.ListByIds(It.IsAny<List<Guid>>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(categories);
+        var useCase = new Catalog.Application.UseCases.Genre.Get.GetGenre(
+            genreRepository.Object,
+            categoryRepository.Object
+        );
         var input = new GetGenreInput(genre.Id);
 
         var output = await useCase.Handle(input, CancellationToken.None);
@@ -28,10 +38,55 @@ public class GetGenreTest(GetGenreTestFixture fixture)
         output.IsActive.Should().Be(genre.IsActive);
         output.Categories.Should().HaveCount(genre.Categories.Count);
         output.Categories.Select(category => category.Id).Should().BeEquivalentTo(genre.Categories);
+        output
+            .Categories.ToList()
+            .ForEach(categoryOutput =>
+            {
+                var category = categories.Find(category => category.Id == categoryOutput.Id);
+                category.Should().NotBeNull();
+                categoryOutput.Name.Should().Be(category.Name);
+            });
         output.CreatedAt.Should().BeSameDateAs(genre.CreatedAt);
         genreRepository.Verify(
             repo => repo.Get(It.Is<Guid>(x => x == genre.Id), It.IsAny<CancellationToken>()),
             Times.Once
+        );
+        categoryRepository.Verify(
+            repo =>
+                repo.ListByIds(
+                    It.Is<List<Guid>>(parameterIds =>
+                        genre.Categories.All(parameterIds.Contains)
+                        && genre.Categories.Count == parameterIds.Count
+                    ),
+                    It.IsAny<CancellationToken>()
+                ),
+            Times.Once
+        );
+    }
+
+    [Fact(DisplayName = nameof(GetGenreWithoutCategoriesShouldNotSearchCategories))]
+    [Trait("Application", "Get Genre - Use Case")]
+    public async Task GetGenreWithoutCategoriesShouldNotSearchCategories()
+    {
+        var genreRepository = fixture.GetGenreRepository();
+        var categoryRepository = fixture.GetCategoryRepository();
+        var genre = fixture.GetValidGenre();
+        genreRepository
+            .Setup(repo => repo.Get(It.Is<Guid>(x => x == genre.Id), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(genre);
+        var useCase = new Catalog.Application.UseCases.Genre.Get.GetGenre(
+            genreRepository.Object,
+            categoryRepository.Object
+        );
+        var input = new GetGenreInput(genre.Id);
+
+        var output = await useCase.Handle(input, CancellationToken.None);
+
+        output.Should().NotBeNull();
+        output.Categories.Should().BeEmpty();
+        categoryRepository.Verify(
+            repo => repo.ListByIds(It.IsAny<List<Guid>>(), It.IsAny<CancellationToken>()),
+            Times.Never
         );
     }
 
@@ -41,12 +96,16 @@ public class GetGenreTest(GetGenreTestFixture fixture)
     {
         var invalidId = Guid.NewGuid();
         var genreRepository = fixture.GetGenreRepository();
+        var categoryRepository = fixture.GetCategoryRepository();
         genreRepository
             .Setup(repo =>
                 repo.Get(It.Is<Guid>(x => x == invalidId), It.IsAny<CancellationToken>())
             )
             .Throws(new NotFoundException("Genre not found"));
-        var useCase = new Catalog.Application.UseCases.Genre.Get.GetGenre(genreRepository.Object);
+        var useCase = new Catalog.Application.UseCases.Genre.Get.GetGenre(
+            genreRepository.Object,
+            categoryRepository.Object
+        );
         var input = new GetGenreInput(invalidId);
 
         var action = () => useCase.Handle(input, CancellationToken.None);
@@ -55,6 +114,10 @@ public class GetGenreTest(GetGenreTestFixture fixture)
         genreRepository.Verify(
             repo => repo.Get(It.Is<Guid>(x => x == invalidId), It.IsAny<CancellationToken>()),
             Times.Once
+        );
+        categoryRepository.Verify(
+            repo => repo.ListByIds(It.IsAny<List<Guid>>(), It.IsAny<CancellationToken>()),
+            Times.Never
         );
     }
 }

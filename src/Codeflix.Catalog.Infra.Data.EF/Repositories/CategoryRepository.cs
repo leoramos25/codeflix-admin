@@ -52,9 +52,10 @@ public class CategoryRepository(CodeflixCatalogDbContext context) : ICategoryRep
         CancellationToken cancellationToken
     )
     {
+        List<Guid> distinctIds = [.. ids.Distinct()];
         return await _categories
             .AsNoTracking()
-            .Where(category => ids.Contains(category.Id))
+            .Where(category => distinctIds.Contains(category.Id))
             .Select(category => category.Id)
             .ToListAsync(cancellationToken);
     }
@@ -83,9 +84,10 @@ public class CategoryRepository(CodeflixCatalogDbContext context) : ICategoryRep
         CancellationToken cancellationToken
     )
     {
+        List<Guid> distinctIds = [.. ids.Distinct()];
         var categories = await _categories
             .AsNoTracking()
-            .Where(category => ids.Contains(category.Id))
+            .Where(category => distinctIds.Contains(category.Id))
             .ToListAsync(cancellationToken);
         return categories.AsReadOnly();
     }

@@ -306,6 +306,46 @@ public class CategoryRepositoryTest(CategoryRepositoryTestFixture fixture)
         }
     }
 
+    [Fact(DisplayName = nameof(ListByIdsWithRepeatedIds))]
+    [Trait("Integration/Infra.Data", "CategoryRepository - Repositories")]
+    public async Task ListByIdsWithRepeatedIds()
+    {
+        var dbContext = fixture.CreateDbContext();
+        var categories = fixture.GetValidCategories(15);
+        var distinctIds = categories.Take(3).Select(category => category.Id).ToList();
+        await dbContext.Categories.AddRangeAsync(categories, CancellationToken.None);
+        await dbContext.SaveChangesAsync(CancellationToken.None);
+        var categoryRepository = new Context.CategoryRepository(fixture.CreateDbContext(true));
+
+        var output = await categoryRepository.ListByIds(
+            [.. distinctIds, .. distinctIds],
+            CancellationToken.None
+        );
+
+        output.Should().HaveCount(distinctIds.Count);
+        output.Select(category => category.Id).Should().BeEquivalentTo(distinctIds);
+    }
+
+    [Fact(DisplayName = nameof(ListIdsByIdsWithRepeatedIds))]
+    [Trait("Integration/Infra.Data", "CategoryRepository - Repositories")]
+    public async Task ListIdsByIdsWithRepeatedIds()
+    {
+        var dbContext = fixture.CreateDbContext();
+        var categories = fixture.GetValidCategories(15);
+        var distinctIds = categories.Take(3).Select(category => category.Id).ToList();
+        await dbContext.Categories.AddRangeAsync(categories, CancellationToken.None);
+        await dbContext.SaveChangesAsync(CancellationToken.None);
+        var categoryRepository = new Context.CategoryRepository(fixture.CreateDbContext(true));
+
+        var output = await categoryRepository.ListIdsByIds(
+            [.. distinctIds, .. distinctIds],
+            CancellationToken.None
+        );
+
+        output.Should().HaveCount(distinctIds.Count);
+        output.Should().BeEquivalentTo(distinctIds);
+    }
+
     [Fact(DisplayName = nameof(ListByIds))]
     [Trait("Integration/Infra.Data", "CategoryRepository - Repositories")]
     public async Task ListByIds()

@@ -64,6 +64,54 @@ public class GetGenreTest(GetGenreTestFixture fixture)
         );
     }
 
+    [Fact(DisplayName = nameof(GetGenreShouldQueryRepeatedCategoryIdsOnlyOnce))]
+    [Trait("Application", "Get Genre - Use Case")]
+    public async Task GetGenreShouldQueryRepeatedCategoryIdsOnlyOnce()
+    {
+        var genreRepository = fixture.GetGenreRepository();
+        var categoryRepository = fixture.GetCategoryRepository();
+        var categories = fixture.GetValidCategories(3);
+        var distinctIds = categories.Select(category => category.Id).ToList();
+        var genre = fixture.GetValidGenreWithCategories([.. distinctIds, .. distinctIds]);
+        genre.Categories.Should().HaveCount(distinctIds.Count * 2);
+        genreRepository
+            .Setup(repo => repo.Get(It.Is<Guid>(x => x == genre.Id), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(genre);
+        categoryRepository
+            .Setup(repo => repo.ListByIds(It.IsAny<List<Guid>>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(categories);
+        var useCase = new Catalog.Application.UseCases.Genre.Get.GetGenre(
+            genreRepository.Object,
+            categoryRepository.Object
+        );
+        var input = new GetGenreInput(genre.Id);
+
+        var output = await useCase.Handle(input, CancellationToken.None);
+
+        output.Should().NotBeNull();
+        output.Categories.Should().HaveCount(distinctIds.Count);
+        output.Categories.Select(category => category.Id).Should().BeEquivalentTo(distinctIds);
+        output
+            .Categories.ToList()
+            .ForEach(categoryOutput =>
+            {
+                var category = categories.Find(category => category.Id == categoryOutput.Id);
+                category.Should().NotBeNull();
+                categoryOutput.Name.Should().Be(category.Name);
+            });
+        categoryRepository.Verify(
+            repo =>
+                repo.ListByIds(
+                    It.Is<List<Guid>>(parameterIds =>
+                        parameterIds.Count == distinctIds.Count
+                        && distinctIds.All(parameterIds.Contains)
+                    ),
+                    It.IsAny<CancellationToken>()
+                ),
+            Times.Once
+        );
+    }
+
     [Fact(DisplayName = nameof(GetGenreWithoutCategoriesShouldNotSearchCategories))]
     [Trait("Application", "Get Genre - Use Case")]
     public async Task GetGenreWithoutCategoriesShouldNotSearchCategories()

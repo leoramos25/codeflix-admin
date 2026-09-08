@@ -12,10 +12,10 @@ public class GetGenre(IGenreRepository genreRepository, ICategoryRepository cate
     {
         var genre = await genreRepository.Get(request.Id, cancellationToken);
         var output = GetGenreOutput.FromGenre(genre);
-        if (genre.Categories.Count > 0)
+        if (output.Categories.Count > 0)
         {
             var categories = await categoryRepository.ListByIds(
-                [.. genre.Categories],
+                [.. output.Categories.Select(category => category.Id)],
                 cancellationToken
             );
             output.FillCategoriesWithName(categories);

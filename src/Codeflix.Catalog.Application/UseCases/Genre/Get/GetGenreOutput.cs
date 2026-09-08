@@ -16,19 +16,22 @@ public record GetGenreOutput(
             genre.Id,
             genre.Name,
             genre.IsActive,
-            genre.Categories.Select(cat => new GetGenreCategoryOutput(cat)).ToList().AsReadOnly(),
+            genre
+                .Categories.Distinct()
+                .Select(categoryId => new GetGenreCategoryOutput(categoryId))
+                .ToList()
+                .AsReadOnly(),
             genre.CreatedAt
         );
     }
 
     public void FillCategoriesWithName(IReadOnlyCollection<DomainEntity.Category> categories)
     {
+        var namesById = categories
+            .DistinctBy(category => category.Id)
+            .ToDictionary(category => category.Id, category => category.Name);
         foreach (var categoryOutput in Categories)
-        {
-            categoryOutput.Name = categories
-                ?.FirstOrDefault(category => category.Id == categoryOutput.Id)
-                ?.Name;
-        }
+            categoryOutput.Name = namesById.GetValueOrDefault(categoryOutput.Id);
     }
 }
 

@@ -69,11 +69,7 @@ public class CreateGenreTest(CreateGenreTestFixture fixture)
         output.Categories.Should().BeEquivalentTo(genresCategoriesFromDb.Select(x => x.CategoryId));
     }
 
-    [Fact(
-        DisplayName = nameof(
-            CreateGenreWithInvalidCategoryRelationship
-        )
-    )]
+    [Fact(DisplayName = nameof(CreateGenreWithInvalidCategoryRelationship))]
     [Trait("Integration/Application", "Create Genre - Use Cases")]
     public async Task CreateGenreWithInvalidCategoryRelationship()
     {

@@ -20,6 +20,7 @@ public static class UseCasesConfiguration
     private static IServiceCollection AddRepositories(this IServiceCollection services)
     {
         services.AddScoped<ICategoryRepository, CategoryRepository>();
+        services.AddScoped<IGenreRepository, GenreRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         return services;
     }

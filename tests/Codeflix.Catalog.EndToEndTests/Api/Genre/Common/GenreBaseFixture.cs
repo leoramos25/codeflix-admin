@@ -1,10 +1,17 @@
-﻿using Codeflix.Catalog.IntegrationTests.Common;
+using Codeflix.Catalog.EndToEndTests.Common;
 using DomainEntity = Codeflix.Catalog.Domain.Entity;
 
-namespace Codeflix.Catalog.IntegrationTests.Application.UseCases.Genre.Common;
+namespace Codeflix.Catalog.EndToEndTests.Api.Genre.Common;
 
-public class GenreUseCaseTestFixture : BaseFixture
+public class GenreBaseFixture : BaseFixture
 {
+    public GenrePersistence Persistence { get; }
+
+    public GenreBaseFixture()
+    {
+        Persistence = new GenrePersistence(CreateDbContext());
+    }
+
     public List<DomainEntity.Genre> GetValidGenresWithNames(List<string> genreNames)
     {
         return genreNames
@@ -15,6 +22,11 @@ public class GenreUseCaseTestFixture : BaseFixture
                 return category;
             })
             .ToList();
+    }
+
+    public List<DomainEntity.Genre> GetValidGenres(int size = 10)
+    {
+        return [.. Enumerable.Range(1, size).Select(_ => GetValidGenre())];
     }
 
     public DomainEntity.Genre GetValidGenre(bool? isActive = null)

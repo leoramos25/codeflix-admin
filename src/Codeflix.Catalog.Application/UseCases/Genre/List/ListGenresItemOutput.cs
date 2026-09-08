@@ -26,5 +26,5 @@ public record ListGenresItemOutput(
 public class CategoryItemOutput(Guid id, string? name = null)
 {
     public Guid Id { get; set; } = id;
-    public string? Name { get; set; } = name;    
+    public string? Name { get; set; } = name;
 }

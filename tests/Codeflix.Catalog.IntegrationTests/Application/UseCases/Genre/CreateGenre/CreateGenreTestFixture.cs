@@ -8,6 +8,6 @@ public class CreateGenreTestFixtureCollection : ICollectionFixture<CreateGenreTe
 
 public class CreateGenreTestFixture : GenreUseCaseTestFixture
 {
-    public CreateGenreInput GetValidInput(List<Guid>? categories = null) => new CreateGenreInput(Faker.Music.Genre(), GetRandomBoolean(), categories);
-
+    public CreateGenreInput GetValidInput(List<Guid>? categories = null) =>
+        new CreateGenreInput(Faker.Music.Genre(), GetRandomBoolean(), categories);
 };

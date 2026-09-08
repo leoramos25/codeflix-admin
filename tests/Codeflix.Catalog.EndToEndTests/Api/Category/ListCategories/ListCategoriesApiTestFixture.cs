@@ -9,11 +9,6 @@ public class ListCategoriesApiTestFixtureCollection
 
 public class ListCategoriesApiTestFixture : CategoryBaseFixture
 {
-    public List<Domain.Entity.Category> GetValidCategories(int size = 10)
-    {
-        return Enumerable.Range(0, size).Select(_ => GetValidCategory()).ToList();
-    }
-
     public List<Domain.Entity.Category> GetOrderedCategories(
         List<Domain.Entity.Category> categories,
         string orderBy,

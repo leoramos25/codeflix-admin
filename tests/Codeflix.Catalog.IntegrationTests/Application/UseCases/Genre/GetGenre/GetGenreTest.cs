@@ -55,7 +55,10 @@ public class GetGenreTest(GetGenreTestFixture fixture)
         output.IsActive.Should().Be(genre.IsActive);
         output.CreatedAt.Should().BeSameDateAs(genre.CreatedAt);
         output.Categories.Should().HaveCount(categories.Count);
-        output.Categories.Select(category => category.Id).Should().BeEquivalentTo(categories.Select(c => c.Id));
+        output
+            .Categories.Select(category => category.Id)
+            .Should()
+            .BeEquivalentTo(categories.Select(c => c.Id));
         output.Categories.Select(category => category.Name).Should().AllBe(null);
     }
 

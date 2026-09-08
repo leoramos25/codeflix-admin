@@ -280,7 +280,7 @@ public class UpdateGenreTest(UpdateGenreTestFixture fixture)
     {
         var genre = fixture.GetValidGenre();
         var invalidId = Guid.NewGuid();
-        
+
         var dbContext = fixture.CreateDbContext();
         await dbContext.Genres.AddAsync(genre, CancellationToken.None);
         await dbContext.SaveChangesAsync(CancellationToken.None);
@@ -295,6 +295,6 @@ public class UpdateGenreTest(UpdateGenreTestFixture fixture)
         await action
             .Should()
             .ThrowAsync<NotFoundException>()
-            .WithMessage( $"Genre '{invalidId}' not found.");
+            .WithMessage($"Genre '{invalidId}' not found.");
     }
 }

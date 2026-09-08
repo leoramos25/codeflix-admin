@@ -22,7 +22,6 @@ public record GetGenreOutput(
 
 public record GetGenreCategoryOutput(Guid Id, string? Name = null)
 {
-    public static GetGenreCategoryOutput Create(Guid id, string? name)
-    => new GetGenreCategoryOutput(id, name);
-
+    public static GetGenreCategoryOutput Create(Guid id, string? name) =>
+        new GetGenreCategoryOutput(id, name);
 };

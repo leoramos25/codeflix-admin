@@ -28,9 +28,9 @@ public class ListGenresOutput : PaginatedListOutput<ListGenresItemOutput>
         {
             foreach (var categoryOutput in item.Categories)
             {
-                categoryOutput.Name = categories?
-                .FirstOrDefault(category => category.Id == categoryOutput.Id)
-                ?.Name;
+                categoryOutput.Name = categories
+                    ?.FirstOrDefault(category => category.Id == categoryOutput.Id)
+                    ?.Name;
             }
         }
     }

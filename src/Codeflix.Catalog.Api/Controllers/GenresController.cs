@@ -1,7 +1,9 @@
 using Codeflix.Catalog.Api.ApiModels;
+using Codeflix.Catalog.Api.ApiModels.Genre;
 using Codeflix.Catalog.Application.UseCases.Genre.Create;
 using Codeflix.Catalog.Application.UseCases.Genre.Delete;
 using Codeflix.Catalog.Application.UseCases.Genre.Get;
+using Codeflix.Catalog.Application.UseCases.Genre.Update;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -48,5 +50,19 @@ public class GenresController(IMediator mediator) : ControllerBase
     {
         await mediator.Send(new DeleteGenreInput(id), cancellationToken);
         return NoContent();
+    }
+
+    [HttpPut("{id:guid}")]
+    [ProducesResponseType(typeof(ApiOutput<UpdateGenreOutput>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
+    public async Task<IActionResult> Update(
+        [FromRoute] Guid id,
+        [FromBody] UpdateGenreApiInput input,
+        CancellationToken cancellationToken
+    )
+    {
+        var output = await mediator.Send(input.ToUpdateGenreInput(id), cancellationToken);
+        return Ok(new ApiOutput<UpdateGenreOutput>(output));
     }
 }

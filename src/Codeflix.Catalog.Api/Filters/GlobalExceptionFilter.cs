@@ -22,6 +22,13 @@ public class GlobalExceptionFilter(IHostEnvironment env) : IExceptionFilter
             details.Type = "UnprocessableEntity";
             details.Detail = exception.Message;
         }
+        else if (exception is RelatedEntityException)
+        {
+            details.Title = "Invalid related aggregate";
+            details.Status = StatusCodes.Status422UnprocessableEntity;
+            details.Type = "RelatedAggregate";
+            details.Detail = exception.Message;
+        }
         else if (exception is NotFoundException)
         {
             details.Title = "Not found";

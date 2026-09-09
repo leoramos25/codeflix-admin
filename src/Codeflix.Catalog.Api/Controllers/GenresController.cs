@@ -1,4 +1,5 @@
 using Codeflix.Catalog.Api.ApiModels;
+using Codeflix.Catalog.Application.UseCases.Genre.Create;
 using Codeflix.Catalog.Application.UseCases.Genre.Delete;
 using Codeflix.Catalog.Application.UseCases.Genre.Get;
 using MediatR;
@@ -11,6 +12,23 @@ namespace Codeflix.Catalog.Api.Controllers;
 [Produces("application/json")]
 public class GenresController(IMediator mediator) : ControllerBase
 {
+    [HttpPost]
+    [ProducesResponseType(typeof(ApiOutput<CreateGenreOutput>), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
+    public async Task<IActionResult> Create(
+        [FromBody] CreateGenreInput input,
+        CancellationToken cancellationToken
+    )
+    {
+        var output = await mediator.Send(input, cancellationToken);
+        return CreatedAtAction(
+            nameof(Get),
+            new { output.Id },
+            new ApiOutput<CreateGenreOutput>(output)
+        );
+    }
+
     [HttpGet("{id:guid}")]
     [ProducesResponseType(typeof(ApiOutput<GetGenreOutput>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]

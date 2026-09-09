@@ -16,6 +16,9 @@ must be broken, say so explicitly and ask first.
 - @.claude/rules/folder-structure.md — where every file goes, project by project, and the
   naming conventions for use cases, controllers and test suites. Applies to every new file,
   folder, namespace or project you create or move.
+- @.claude/rules/tdd.md — the mandatory RED/GREEN/BLUE cycle. No production code is written
+  while there is no failing test that requires it. Applies to every change that touches
+  source code.
 
 ## Commands
 

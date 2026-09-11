@@ -15,9 +15,9 @@ public class GetGenreTest(GetGenreTestFixture fixture)
         var genreRepository = fixture.GetGenreRepository();
         var categoryRepository = fixture.GetCategoryRepository();
         var categories = fixture.GetValidCategories(3);
-        var genre = fixture.GetValidGenreWithCategories(
-            [.. categories.Select(category => category.Id)]
-        );
+        var genre = fixture.GetValidGenreWithCategories([
+            .. categories.Select(category => category.Id),
+        ]);
         genreRepository
             .Setup(repo => repo.Get(It.Is<Guid>(x => x == genre.Id), It.IsAny<CancellationToken>()))
             .ReturnsAsync(genre);

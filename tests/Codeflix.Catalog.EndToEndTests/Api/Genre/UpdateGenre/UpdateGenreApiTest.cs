@@ -59,7 +59,7 @@ public class UpdateGenreApiTest(UpdateGenreApiTestFixture fixture) : IDisposable
         var categories = fixture.GetValidCategories(10);
         var seededCategories = categories.GetRange(0, 5);
         seededCategories.ForEach(category => genre.AddCategory(category.Id));
-        await fixture.Persistence.InsertCategoriesList(categories, CancellationToken.None);
+        await fixture.CategoryPersistence.InsertList(categories, CancellationToken.None);
         await fixture.Persistence.InsertList(genres, CancellationToken.None);
         await fixture.Persistence.InsertGenresCategoriesRelationsList(
             [.. seededCategories.Select(category => new GenresCategories(genre.Id, category.Id))],
@@ -119,7 +119,7 @@ public class UpdateGenreApiTest(UpdateGenreApiTestFixture fixture) : IDisposable
         var genres = fixture.GetValidGenres(10);
         var genre = genres[5];
         var categories = fixture.GetValidCategories(5);
-        await fixture.Persistence.InsertCategoriesList(categories, CancellationToken.None);
+        await fixture.CategoryPersistence.InsertList(categories, CancellationToken.None);
         await fixture.Persistence.InsertList(genres, CancellationToken.None);
         var categoryIds = categories.Select(category => category.Id).ToList();
         var invalidCategoryId = Guid.NewGuid();
@@ -175,7 +175,7 @@ public class UpdateGenreApiTest(UpdateGenreApiTestFixture fixture) : IDisposable
         var genre = genres[5];
         var categories = fixture.GetValidCategories(5);
         categories.ForEach(category => genre.AddCategory(category.Id));
-        await fixture.Persistence.InsertCategoriesList(categories, CancellationToken.None);
+        await fixture.CategoryPersistence.InsertList(categories, CancellationToken.None);
         await fixture.Persistence.InsertList(genres, CancellationToken.None);
         await fixture.Persistence.InsertGenresCategoriesRelationsList(
             [.. categories.Select(category => new GenresCategories(genre.Id, category.Id))],

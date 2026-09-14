@@ -46,7 +46,7 @@ public class CreateGenreApiTest(CreateGenreApiTestFixture fixture)
     public async Task CreateGenreWithCategories()
     {
         var categories = fixture.GetValidCategories(5);
-        await fixture.Persistence.InsertCategoriesList(categories, CancellationToken.None);
+        await fixture.CategoryPersistence.InsertList(categories, CancellationToken.None);
         var categoryIds = categories.Select(category => category.Id).ToList();
         var input = fixture.GetValidInput(categoryIds);
 
@@ -81,7 +81,7 @@ public class CreateGenreApiTest(CreateGenreApiTestFixture fixture)
     public async Task ThrowWhenRelatedCategoryNotFound()
     {
         var categories = fixture.GetValidCategories(5);
-        await fixture.Persistence.InsertCategoriesList(categories, CancellationToken.None);
+        await fixture.CategoryPersistence.InsertList(categories, CancellationToken.None);
         var categoryIds = categories.Select(category => category.Id).ToList();
         var invalidCategoryId = Guid.NewGuid();
         categoryIds.Add(invalidCategoryId);

@@ -111,7 +111,7 @@ public class ListGenresApiTest(ListGenresApiTestFixture fixture) : IDisposable
                 genre.Categories.Select(categoryId => new GenresCategories(genre.Id, categoryId))
             )
             .ToList();
-        await fixture.Persistence.InsertCategoriesList(categories, CancellationToken.None);
+        await fixture.CategoryPersistence.InsertList(categories, CancellationToken.None);
         await fixture.Persistence.InsertList(genres, CancellationToken.None);
         await fixture.Persistence.InsertGenresCategoriesRelationsList(
             relations,

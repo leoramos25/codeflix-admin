@@ -39,7 +39,7 @@ public class DeleteGenreApiTest(DeleteGenreApiTestFixture fixture)
         var genre = genres[5];
         var categories = fixture.GetValidCategories(5);
         categories.ForEach(category => genre.AddCategory(category.Id));
-        await fixture.Persistence.InsertCategoriesList(categories, CancellationToken.None);
+        await fixture.CategoryPersistence.InsertList(categories, CancellationToken.None);
         await fixture.Persistence.InsertList(genres, CancellationToken.None);
         await fixture.Persistence.InsertGenresCategoriesRelationsList(
             [.. categories.Select(category => new GenresCategories(genre.Id, category.Id))],

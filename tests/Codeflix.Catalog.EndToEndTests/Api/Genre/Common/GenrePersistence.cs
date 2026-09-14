@@ -15,15 +15,6 @@ public class GenrePersistence(CodeflixCatalogDbContext context)
         await context.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task InsertCategoriesList(
-        List<DomainEntity.Category> categories,
-        CancellationToken cancellationToken = default
-    )
-    {
-        await context.Categories.AddRangeAsync(categories, cancellationToken);
-        await context.SaveChangesAsync(cancellationToken);
-    }
-
     public async Task InsertGenresCategoriesRelationsList(
         List<GenresCategories> relations,
         CancellationToken cancellationToken = default

@@ -1,0 +1,248 @@
+{
+  "info": {
+    "name": "Codeflix Admin Catalog",
+    "description": "Endpoints da API Codeflix.Catalog.Api (Categories e Genres).\n\nO corpo das requisições e as respostas usam snake_case (JsonNamingPolicy.SnakeCaseLower).\n\nSuba a API sempre em uma porta da faixa 5000-5099:\n\n    dotnet run --project src/Codeflix.Catalog.Api --urls \"http://localhost:5000\"\n\nAs requisições de criação salvam o id retornado nas variáveis de collection `category_id` e `genre_id`, usadas pelas demais requisições.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "key": "category_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "genre_id",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Categories",
+      "item": [
+        {
+          "name": "Create category",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    pm.collectionVariables.set(\"category_id\", pm.response.json().data.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Action\",\n  \"description\": \"Categoria de filmes de ação\",\n  \"is_active\": true\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/categories",
+              "host": ["{{base_url}}"],
+              "path": ["categories"]
+            },
+            "description": "POST /categories — cria uma categoria.\n\nRespostas: 201 Created, 400 Bad Request, 422 Unprocessable Entity."
+          },
+          "response": []
+        },
+        {
+          "name": "List categories",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/categories?page=1&per_page=15&search=&sort=&dir=",
+              "host": ["{{base_url}}"],
+              "path": ["categories"],
+              "query": [
+                { "key": "page", "value": "1", "description": "Número da página (opcional)" },
+                { "key": "per_page", "value": "15", "description": "Itens por página (opcional)" },
+                { "key": "search", "value": "", "description": "Busca por nome (opcional)" },
+                { "key": "sort", "value": "", "description": "Campo de ordenação: name, createdAt... (opcional)" },
+                { "key": "dir", "value": "", "description": "Direção da ordenação: Asc ou Desc (opcional)" }
+              ]
+            },
+            "description": "GET /categories — lista paginada. Todos os parâmetros de query são opcionais; valores vazios são ignorados pela API."
+          },
+          "response": []
+        },
+        {
+          "name": "Get category by id",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/categories/{{category_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["categories", "{{category_id}}"]
+            },
+            "description": "GET /categories/{id} — busca uma categoria pelo id (GUID).\n\nRespostas: 200 OK, 404 Not Found."
+          },
+          "response": []
+        },
+        {
+          "name": "Update category",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Action updated\",\n  \"description\": \"Descrição atualizada\",\n  \"is_active\": false\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/categories/{{category_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["categories", "{{category_id}}"]
+            },
+            "description": "PUT /categories/{id} — atualiza uma categoria. `description` e `is_active` são opcionais; quando omitidos, os valores atuais são mantidos.\n\nRespostas: 200 OK, 404 Not Found, 422 Unprocessable Entity."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete category",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/categories/{{category_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["categories", "{{category_id}}"]
+            },
+            "description": "DELETE /categories/{id} — remove uma categoria.\n\nRespostas: 204 No Content, 404 Not Found."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Genres",
+      "item": [
+        {
+          "name": "Create genre",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    pm.collectionVariables.set(\"genre_id\", pm.response.json().data.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Drama\",\n  \"is_active\": true,\n  \"categories\": []\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/genres",
+              "host": ["{{base_url}}"],
+              "path": ["genres"]
+            },
+            "description": "POST /genres — cria um gênero. `categories` é a lista de ids (GUID) de categorias relacionadas; pode ser omitida ou vazia.\n\nRespostas: 201 Created, 400 Bad Request, 422 Unprocessable Entity."
+          },
+          "response": []
+        },
+        {
+          "name": "List genres",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/genres?page=1&per_page=15&search=&sort=&dir=",
+              "host": ["{{base_url}}"],
+              "path": ["genres"],
+              "query": [
+                { "key": "page", "value": "1", "description": "Número da página (opcional)" },
+                { "key": "per_page", "value": "15", "description": "Itens por página (opcional)" },
+                { "key": "search", "value": "", "description": "Busca por nome (opcional)" },
+                { "key": "sort", "value": "", "description": "Campo de ordenação: name, createdAt... (opcional)" },
+                { "key": "dir", "value": "", "description": "Direção da ordenação: Asc ou Desc (opcional)" }
+              ]
+            },
+            "description": "GET /genres — lista paginada. Todos os parâmetros de query são opcionais; valores vazios são ignorados pela API."
+          },
+          "response": []
+        },
+        {
+          "name": "Get genre by id",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/genres/{{genre_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["genres", "{{genre_id}}"]
+            },
+            "description": "GET /genres/{id} — busca um gênero pelo id (GUID).\n\nRespostas: 200 OK, 404 Not Found."
+          },
+          "response": []
+        },
+        {
+          "name": "Update genre",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Drama updated\",\n  \"is_active\": false,\n  \"categories\": [\"{{category_id}}\"]\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/genres/{{genre_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["genres", "{{genre_id}}"]
+            },
+            "description": "PUT /genres/{id} — atualiza um gênero. `is_active` e `categories` são opcionais; quando `categories` é omitida, as relações atuais são mantidas.\n\nRespostas: 200 OK, 404 Not Found, 422 Unprocessable Entity."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete genre",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/genres/{{genre_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["genres", "{{genre_id}}"]
+            },
+            "description": "DELETE /genres/{id} — remove um gênero.\n\nRespostas: 204 No Content, 404 Not Found."
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

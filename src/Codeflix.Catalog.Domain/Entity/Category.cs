@@ -14,7 +14,7 @@ public class Category : AggregateRoot
         Name = name;
         Description = description;
         IsActive = isActive;
-        CreatedAt = DateTime.Now;
+        CreatedAt = DateTime.UtcNow;
         Validate();
     }
 

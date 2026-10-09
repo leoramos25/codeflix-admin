@@ -1,8 +1,8 @@
+using Codeflix.Catalog.Domain.Exceptions;
 using FluentAssertions;
 using Moq;
-using UseCases = Codeflix.Catalog.Application.UseCases.CastMember.Create;
 using DomainEntity = Codeflix.Catalog.Domain.Entity;
-using Codeflix.Catalog.Domain.Exceptions;
+using UseCases = Codeflix.Catalog.Application.UseCases.CastMember.Create;
 
 namespace Codeflix.Catalog.UnitTests.Application.CastMember.CreateCastMember;
 
@@ -31,10 +31,7 @@ public class CreateCastMemberTest(CreateCastMemberTestFixture fixture)
         output.Type.Should().Be(input.Type);
         output.CreatedAt.Should().NotBeSameDateAs(default);
         castMemberRepositoryMock.Verify(repo =>
-            repo.Insert(
-                It.IsAny<DomainEntity.CastMember>(),
-                It.IsAny<CancellationToken>()
-            )
+            repo.Insert(It.IsAny<DomainEntity.CastMember>(), It.IsAny<CancellationToken>())
         );
         unitOfWorkMock.Verify(uow => uow.Commit(It.IsAny<CancellationToken>()), Times.Once);
     }
@@ -52,19 +49,14 @@ public class CreateCastMemberTest(CreateCastMemberTestFixture fixture)
             castMemberRepositoryMock.Object,
             unitOfWorkMock.Object
         );
-        var input = new UseCases.CreateCastMemberInput(
-            name!,
-            fixture.GetRandomCastMemberType()
-        );
+        var input = new UseCases.CreateCastMemberInput(name!, fixture.GetRandomCastMemberType());
 
         var action = () => useCase.Handle(input, CancellationToken.None);
 
         await action.Should().ThrowAsync<EntityValidationException>();
-        castMemberRepositoryMock.Verify(repo =>
-            repo.Insert(
-                It.IsAny<DomainEntity.CastMember>(),
-                It.IsAny<CancellationToken>()
-            ), Times.Never
+        castMemberRepositoryMock.Verify(
+            repo => repo.Insert(It.IsAny<DomainEntity.CastMember>(), It.IsAny<CancellationToken>()),
+            Times.Never
         );
         unitOfWorkMock.Verify(uow => uow.Commit(It.IsAny<CancellationToken>()), Times.Never);
     }

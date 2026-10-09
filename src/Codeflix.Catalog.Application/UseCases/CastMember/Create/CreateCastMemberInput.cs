@@ -3,4 +3,5 @@ using MediatR;
 
 namespace Codeflix.Catalog.Application.UseCases.CastMember.Create;
 
-public record CreateCastMemberInput(string Name, CastMemberType Type) : IRequest<CreateCastMemberOutput>;
+public record CreateCastMemberInput(string Name, CastMemberType Type)
+    : IRequest<CreateCastMemberOutput>;

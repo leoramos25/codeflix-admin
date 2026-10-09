@@ -23,13 +23,37 @@ must be broken, say so explicitly and ask first.
 ## Commands
 
 ```bash
+dotnet tool restore                # CSharpier (pinned in dotnet-tools.json)
 dotnet build
 dotnet test
-docker compose up -d   # MySQL on port 33060, required by the end-to-end tests
+dotnet csharpier format .          # the formatter; a hook also runs it on every edited .cs
+docker compose up -d               # two MySQL: `database` on 3306 (dev / migrations),
+                                   #            `database-e2e` on 33060 (end-to-end tests)
 
 # Always run the API on a port in the 5000-5099 range:
 dotnet run --project src/Codeflix.Catalog.Api --urls "http://localhost:5000"
+
+# Migrations (generated code — ask before creating one, see tdd.md):
+dotnet ef migrations add <Name> --project src/Codeflix.Catalog.Infra.Data.EF \
+  --startup-project src/Codeflix.Catalog.Api
 ```
+
+## Harness
+
+`.claude/settings.json` (committed) pre-approves build/test/format/read-only git and
+wires two hooks in `.claude/hooks/`:
+
+- `format-csharp.py` — PostToolUse on Write/Edit: runs CSharpier on the edited `.cs`
+  file (skips `Migrations/`).
+- `guard-api-port.py` — PreToolUse on Bash: blocks `dotnet run` without an explicit
+  `--urls`/`ASPNETCORE_URLS` port in 5000-5099.
+
+Direct edits under `Infra.Data.EF/Migrations/` are denied; regenerate instead.
+
+## Commits
+
+One commit per use case or per layer step, Conventional Commits in English:
+`feat: add <verb> <aggregate> use case`, `fix: ...`, `test: ...`, `chore: ...`.
 
 ## Ports
 
@@ -37,3 +61,4 @@ dotnet run --project src/Codeflix.Catalog.Api --urls "http://localhost:5000"
 other port. If 5000 is taken, pick the next free port inside that range instead of letting the
 tooling choose one. Pass it explicitly with `--urls` (or `ASPNETCORE_URLS`), because the `http`
 profile in `Properties/launchSettings.json` still defaults to 5208, which is outside the range.
+The `guard-api-port.py` hook enforces this.

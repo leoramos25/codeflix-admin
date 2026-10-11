@@ -170,4 +170,45 @@ public class CastMemberRepositoryTest(CastMemberRepositoryTestFixture fixture)
             outputItem.CreatedAt.Should().BeSameDateAs(expectedItem.CreatedAt);
         }
     }
+
+    [Theory(DisplayName = nameof(SearchByText))]
+    [Trait("Integration/Infra.Data", "CastMemberRepository - Repositories")]
+    [InlineData("Tom", 1, 5, 3, 3)]
+    [InlineData("Davis", 1, 5, 2, 2)]
+    [InlineData("Hanks", 1, 5, 1, 1)]
+    [InlineData("Tom", 2, 2, 1, 3)]
+    [InlineData("Tom Cruise", 1, 5, 1, 1)]
+    [InlineData("Nonexistent", 1, 5, 0, 0)]
+    public async Task SearchByText(
+        string search,
+        int page,
+        int perPage,
+        int expectedQuantityItemsReturned,
+        int expectedQuantityTotalItems
+    )
+    {
+        var dbContext = fixture.CreateDbContext();
+        var castMembers = fixture.GetValidCastMembersWithNames([
+            "Tom Hanks",
+            "Tom Cruise",
+            "Tom Holland",
+            "Viola Davis",
+            "Geena Davis",
+            "Meryl Streep",
+            "Greta Gerwig",
+        ]);
+        await dbContext.CastMembers.AddRangeAsync(castMembers, CancellationToken.None);
+        await dbContext.SaveChangesAsync(CancellationToken.None);
+        var repository = new Context.CastMemberRepository(fixture.CreateDbContext(true));
+        var searchInput = new SearchInput(page, perPage, search, "", SearchOrder.Asc);
+
+        var output = await repository.Search(searchInput, CancellationToken.None);
+
+        output.Should().NotBeNull();
+        output.CurrentPage.Should().Be(page);
+        output.PerPage.Should().Be(perPage);
+        output.Total.Should().Be(expectedQuantityTotalItems);
+        output.Items.Should().HaveCount(expectedQuantityItemsReturned);
+        output.Items.Should().OnlyContain(item => item.Name.Contains(search));
+    }
 }

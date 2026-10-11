@@ -39,6 +39,8 @@ public class CastMemberRepository(CodeflixCatalogDbContext context) : ICastMembe
     {
         var toSkip = (input.Page - 1) * input.PerPage;
         var query = _castMembers.AsNoTracking();
+        if (!string.IsNullOrWhiteSpace(input.Search))
+            query = query.Where(castMember => castMember.Name.Contains(input.Search));
         query = AddOrderToQuery(query, input.OrderBy, input.Order);
         var total = await query.CountAsync(cancellationToken);
         var items = await query.Skip(toSkip).Take(input.PerPage).ToListAsync(cancellationToken);

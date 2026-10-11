@@ -21,6 +21,9 @@ public class CastMemberRepositoryTestFixture : BaseFixture
     internal List<DomainEntity.CastMember> GetValidCastMembers(int size = 10) =>
         Enumerable.Range(1, size).Select(_ => GetValidCastMember()).ToList();
 
+    public List<DomainEntity.CastMember> GetValidCastMembersWithNames(List<string> names) =>
+        [.. names.Select(name => new DomainEntity.CastMember(name, GetRandomCastMemberType()))];
+
     public List<DomainEntity.CastMember> GetOrderedCastMembers(
         List<DomainEntity.CastMember> castMembers,
         string orderBy,

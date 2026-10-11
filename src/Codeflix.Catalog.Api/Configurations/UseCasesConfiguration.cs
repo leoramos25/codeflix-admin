@@ -21,6 +21,7 @@ public static class UseCasesConfiguration
     {
         services.AddScoped<ICategoryRepository, CategoryRepository>();
         services.AddScoped<IGenreRepository, GenreRepository>();
+        services.AddScoped<ICastMemberRepository, CastMemberRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         return services;
     }

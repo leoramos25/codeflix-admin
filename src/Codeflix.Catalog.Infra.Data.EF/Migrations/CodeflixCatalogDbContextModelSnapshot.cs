@@ -22,6 +22,27 @@ namespace Codeflix.Catalog.Infra.Data.EF.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
+            modelBuilder.Entity("Codeflix.Catalog.Domain.Entity.CastMember", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CastMembers");
+                });
+
             modelBuilder.Entity("Codeflix.Catalog.Domain.Entity.Category", b =>
                 {
                     b.Property<Guid>("Id")

@@ -19,6 +19,18 @@ must be broken, say so explicitly and ask first.
 - @.claude/rules/tdd.md — the mandatory RED/GREEN/BLUE cycle. No production code is written
   while there is no failing test that requires it. Applies to every change that touches
   source code.
+- @.claude/rules/ef-core.md — how persistence is mapped: DbContext shape, one explicit
+  `IEntityTypeConfiguration` per persisted type, how EF builds rich aggregates without
+  setters, join models, repositories that never save, and migrations. Applies to every
+  change in `Infra.Data.EF` and to any domain change that alters what is persisted.
+- @.claude/rules/aggregate-relationships.md — DDD rules for relations between aggregates:
+  reference by id only, one aggregate per transaction, related-id validation in the use
+  case, batched reads, join-table persistence and the tests a relation needs.
+- @.claude/rules/api-configuration.md — the Api as composition root: `Program.cs` as a
+  chain of `Add<Concern>`/`Use<Concern>` extensions, one `<Concern>Configuration` class per
+  concern, DI lifetimes, the HTTP contract (snake_case, string enums, envelopes, exception
+  mapping), and appsettings per environment. Applies to every change in `Program.cs`,
+  `Configurations/`, `Filters/`, `appsettings*.json` and the Api `.csproj`.
 
 ## Commands
 
@@ -34,9 +46,20 @@ docker compose up -d               # two MySQL: `database` on 3306 (dev / migrat
 dotnet run --project src/Codeflix.Catalog.Api --urls "http://localhost:5000"
 
 # Migrations (generated code — ask before creating one, see tdd.md):
+dotnet ef migrations has-pending-model-changes --project src/Codeflix.Catalog.Infra.Data.EF \
+  --startup-project src/Codeflix.Catalog.Api   # non-zero exit = model changed, migration missing
 dotnet ef migrations add <Name> --project src/Codeflix.Catalog.Infra.Data.EF \
   --startup-project src/Codeflix.Catalog.Api
 ```
+
+## Migrations check
+
+Before declaring any task done or committing, run `dotnet ef migrations has-pending-model-changes`
+(above) whenever the change touches persistence: an entity property, a `DbSet` in
+`CodeflixCatalogDbContext`, a file in `Infra.Data.EF/Configurations/` or `Models/`. If it reports
+pending changes, say so and ask before running `migrations add`. The end-to-end tests do **not**
+catch a missing migration — `CustomWebApplicationFactory` builds the schema with `EnsureCreated`,
+so they pass while the dev database (`database`, port 3306) is missing the table.
 
 ## Harness
 

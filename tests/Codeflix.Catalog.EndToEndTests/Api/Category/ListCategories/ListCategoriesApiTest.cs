@@ -214,7 +214,11 @@ public class ListCategoriesApiTest(ListCategoriesApiTestFixture fixture) : IDisp
         output.Meta!.Total.Should().Be(categories.Count);
         output.Meta.CurrentPage.Should().Be(input.Page);
         output.Meta.PerPage.Should().Be(input.PerPage);
-        var expectedList = fixture.GetOrderedCategories(categories, input.Sort, input.Dir);
+        // MySQL keeps CreatedAt at microsecond precision (.NET uses 100ns ticks), so categories
+        // created within the same microsecond tie in the database and fall back to the Id
+        // tie-breaker. Order what was actually persisted, not the in-memory instances.
+        var persistedCategories = await fixture.Persistence.GetAll();
+        var expectedList = fixture.GetOrderedCategories(persistedCategories, input.Sort, input.Dir);
         for (var index = 0; index < expectedList.Count; index++)
         {
             var expectedItem = expectedList[index];

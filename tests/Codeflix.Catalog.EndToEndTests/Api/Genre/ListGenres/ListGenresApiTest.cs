@@ -239,7 +239,11 @@ public class ListGenresApiTest(ListGenresApiTestFixture fixture) : IDisposable
         output!.Meta!.Total.Should().Be(genres.Count);
         output.Meta.CurrentPage.Should().Be(input.Page);
         output.Meta.PerPage.Should().Be(input.PerPage);
-        var expectedList = fixture.GetOrderedGenres(genres, input.Sort, input.Dir);
+        // MySQL keeps CreatedAt at microsecond precision (.NET uses 100ns ticks), so genres
+        // created within the same microsecond tie in the database and fall back to the Id
+        // tie-breaker. Order what was actually persisted, not the in-memory instances.
+        var persistedGenres = await fixture.Persistence.GetAll();
+        var expectedList = fixture.GetOrderedGenres(persistedGenres, input.Sort, input.Dir);
         for (var index = 0; index < expectedList.Count; index++)
         {
             var expectedItem = expectedList[index];

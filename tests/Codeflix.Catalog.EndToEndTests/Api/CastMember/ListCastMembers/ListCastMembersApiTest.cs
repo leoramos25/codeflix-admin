@@ -114,7 +114,15 @@ public class ListCastMembersApiTest(ListCastMembersApiTestFixture fixture) : IDi
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         output.Should().NotBeNull();
         output!.Meta!.Total.Should().Be(castMembers.Count);
-        var expectedList = fixture.GetOrderedCastMembers(castMembers, orderBy, searchOrder);
+        // MySQL keeps CreatedAt at microsecond precision (.NET uses 100ns ticks), so members
+        // created within the same microsecond tie in the database and fall back to the Id
+        // tie-breaker. Order what was actually persisted, not the in-memory instances.
+        var persistedCastMembers = await fixture.Persistence.GetAll();
+        var expectedList = fixture.GetOrderedCastMembers(
+            persistedCastMembers,
+            orderBy,
+            searchOrder
+        );
         output
             .Data!.Select(item => item.Id)
             .Should()

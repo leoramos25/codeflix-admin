@@ -10,6 +10,13 @@ public class CategoryPersistence(CodeflixCatalogDbContext context)
         return await context.Categories.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
     }
 
+    public async Task<List<Domain.Entity.Category>> GetAll(
+        CancellationToken cancellationToken = default
+    )
+    {
+        return await context.Categories.AsNoTracking().ToListAsync(cancellationToken);
+    }
+
     public async Task InsertList(
         List<Domain.Entity.Category> categories,
         CancellationToken cancellationToken = default

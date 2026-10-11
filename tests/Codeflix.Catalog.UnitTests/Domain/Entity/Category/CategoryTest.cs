@@ -214,12 +214,16 @@ public class CategoryTest(CategoryTestFixture fixture)
 
     public static IEnumerable<object[]> GetNameWithLessThan3Characters(int numberOfTests)
     {
+        // xUnit skips theory rows with duplicate data, so random names must be distinct
+        // or the suite runs a different number of cases on every execution.
         var fixture = new CategoryTestFixture();
-        for (var i = 0; i < numberOfTests; i++)
+        var names = new HashSet<string>();
+        while (names.Count < numberOfTests)
         {
-            var isOdd = i % 2 == 1;
-            yield return [fixture.GetValidCategoryName()[..(isOdd ? 1 : 2)]];
+            var isOdd = names.Count % 2 == 1;
+            names.Add(fixture.GetValidCategoryName()[..(isOdd ? 1 : 2)]);
         }
+        return names.Select(name => new object[] { name });
     }
 
     [Fact(DisplayName = nameof(UpdateThrowExceptionWhenNameGreaterThan255Characters))]

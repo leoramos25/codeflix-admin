@@ -15,6 +15,13 @@ public class CastMemberPersistence(CodeflixCatalogDbContext context)
         await context.SaveChangesAsync(cancellationToken);
     }
 
+    public async Task<List<DomainEntity.CastMember>> GetAll(
+        CancellationToken cancellationToken = default
+    )
+    {
+        return await context.CastMembers.AsNoTracking().ToListAsync(cancellationToken);
+    }
+
     public async Task<DomainEntity.CastMember?> GetById(
         Guid id,
         CancellationToken cancellationToken = default

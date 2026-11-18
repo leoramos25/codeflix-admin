@@ -83,9 +83,18 @@ Trait **name** is the filter key: `dotnet test --filter "Application=..."`.
 | Integration, repository | `Integration/Infra.Data` | `<Repository> - Repositories` |
 | End-to-end | `EndToEnd/Api` | `<UseCase> - Endpoints` |
 
+`<UseCase>` is the folder name with no spaces (`CreateGenre - Use Cases`, never
+`Create Genre - Use Case`).
+
 Existing code is inconsistent here — `CreateGenre`/`UpdateGenre` unit tests use a
-`Genre` trait name, and some values say `Use Case` singular. Use the table above
-for new tests; do not propagate the outliers.
+`Genre` trait name; the unit Genre/CastMember and integration Genre suites use spaced
+values, some with `Use Case` singular; `GenreTest` uses `Genre - Aggregate`. Use the
+table above for new tests; do not propagate the outliers.
+
+Unit mock factories are named `Get<Port>Mock()` and return a new `Mock<T>`
+(`GetGenreRepositoryMock()`, `GetUnitOfWorkMock()`). `GenreUseCaseBaseFixture`
+(`GetGenreRepository()`, `GetUnitOfWork()`) and `CategoryUseCaseBaseFixture`
+(`GetRepositoryMock()`) predate this; do not copy their names.
 
 ## 5. Gotchas
 
@@ -101,7 +110,8 @@ var assertDbContext = fixture.CreateDbContext(true);
 var fromDb = await assertDbContext.Genres.FindAsync(output.Id);
 ```
 
-**Integration + e2e share one database.** Both projects set
+**Collections share one database per project.** Integration uses one fixed InMemory
+store name, end-to-end one MySQL database, so both projects set
 `parallelizeTestCollections: false` and `maxParallelThreads: 1` in
 `xunit.runner.json`. Keep it that way — removing it produces flakes, not speed.
 

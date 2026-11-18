@@ -59,7 +59,7 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
   rule. Required strings also get `IsRequired()`.
 - **Read-only collections of ids are not columns.** Call `builder.Ignore(x => x.<Relation>s)`
   for every `IReadOnlyCollection<Guid>` the aggregate exposes; the relation lives in a join
-  model (see the aggregate-relationships rule). Do not rely on EF happening to skip it.
+  model (see Join models below). Do not rely on EF happening to skip it.
 - **Enums persist as `int`** (EF default). Never reorder or renumber an existing enum member;
   add new members at the end with an explicit value.
 - `DateTime` is UTC, persisted as `datetime(6)`. No value converter needed.
@@ -116,7 +116,10 @@ builder.HasKey(relation => new { relation.GenreId, relation.CategoryId });
 - Any change to a mapped property, a configuration, a join model or a `DbSet` needs a
   migration. Migrations are generated code: **say so and ask before running
   `dotnet ef migrations add`**, then read the generated `Up()` — never hand-edit `Migrations/`.
-- Check with `dotnet ef migrations has-pending-model-changes` before finishing. The end-to-end
+- Check with `dotnet ef migrations has-pending-model-changes` before finishing, with the
+  `database` container (3306) up — design time connects to MySQL (`ServerVersion.AutoDetect`),
+  so with it down the command fails with `Unable to connect to any of the specified MySQL
+  hosts`, which is not a pending change (see the migrations check in `CLAUDE.md`). The end-to-end
   suite builds the schema with `EnsureCreated` and integration tests use EF InMemory, so
   neither detects a missing or wrong migration, nor a missing `HasMaxLength`.
 

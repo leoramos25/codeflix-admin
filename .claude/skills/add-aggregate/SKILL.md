@@ -26,6 +26,11 @@ tests/Codeflix.Catalog.UnitTests/Domain/Entity/<Aggregate>/<Aggregate>TestFixtur
 `Validation/DomainValidation.cs` only when an existing one genuinely does not fit, and
 only driven by a failing test. Never add a new top-level folder to the Domain project.
 
+An enum the aggregate needs goes in `Enum/<Name>.cs`, namespace
+`Codeflix.Catalog.Domain.Enum`, like `CastMemberType`. Start at 1 (`Director = 1`), so
+`0` is never a valid member. It is persisted as `int`: never reorder or renumber a
+member, and add new ones at the end with an explicit value.
+
 `Domain` references nothing. No EF, no MediatR, no FluentValidation, no `Microsoft.*`.
 If an aggregate seems to need one of those, the design is wrong — ask before proceeding.
 
@@ -119,7 +124,7 @@ The aggregate's tests live in `Codeflix.Catalog.UnitTests` under
 - **`<Aggregate>Test.cs`** carries `[Collection(nameof(<Aggregate>TestFixture))]` and
   takes the fixture as a primary-constructor parameter. Every method is
   `[Fact(DisplayName = nameof(TheMethod))]` or `[Theory(...)]` plus
-  `[Trait("Domain", "<Aggregate> - Aggregate")]`. `DisplayName` must be `nameof` the
+  `[Trait("Domain", "<Aggregate> - Aggregates")]`. `DisplayName` must be `nameof` the
   method itself, because `dotnet test --filter "DisplayName=X"` depends on it.
 
 The test file aliases the entity namespace, because the test namespace collides with
@@ -136,6 +141,10 @@ Assertions use FluentAssertions. Full skeletons in `references/templates.md`.
   is `Validate()` and nothing else.
 - **`GenreTestFixture` redeclares `GetRandomBoolean()`**, already inherited from
   `BaseFixture`. Do not duplicate it.
+- **`CastMemberTestFixture` picks the type with `Next(1, 2)`**, which always returns 1
+  (the upper bound is exclusive). Pick from `Enum.GetValues<TEnum>()` instead.
+- **`GenreTest` uses the trait value `Genre - Aggregate`** (singular); use
+  `<Aggregate> - Aggregates`.
 - **No navigation properties, no join model, no foreign-key property** on the entity.
   Persistence rehydrates relations by calling the public `Add<Relation>` mutator, so
   that mutator must stay callable repeatedly without corrupting state, and it does not

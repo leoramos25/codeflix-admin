@@ -25,7 +25,8 @@ in the domain, implementations in `Infra.Data.EF`). Never reference `Infra.Data.
 ### `Codeflix.Catalog.Domain`
 
 ```
-Entity/                        # one file per aggregate: Category.cs, Genre.cs
+Entity/                        # one file per aggregate: Category.cs, Genre.cs, CastMember.cs
+Enum/                          # one file per domain enum: CastMemberType.cs
 Exceptions/                    # EntityValidationException.cs, RelatedEntityException.cs
 Repository/                    # I<Aggregate>Repository.cs — interfaces only
 SeedWork/                      # Entity, AggregateRoot, IRepository, IGenericRepository

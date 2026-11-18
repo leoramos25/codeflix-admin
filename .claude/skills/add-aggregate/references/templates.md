@@ -171,7 +171,7 @@ namespace Codeflix.Catalog.UnitTests.Domain.Entity.<Aggregate>;
 public class <Aggregate>Test(<Aggregate>TestFixture fixture)
 {
     [Fact(DisplayName = nameof(Instantiate))]
-    [Trait("Domain", "<Aggregate> - Aggregate")]
+    [Trait("Domain", "<Aggregate> - Aggregates")]
     public void Instantiate()
     {
         var validName = fixture.GetValidName();
@@ -186,7 +186,7 @@ public class <Aggregate>Test(<Aggregate>TestFixture fixture)
     }
 
     [Theory(DisplayName = nameof(InstantiateShouldThrowWhenNameIsInvalid))]
-    [Trait("Domain", "<Aggregate> - Aggregate")]
+    [Trait("Domain", "<Aggregate> - Aggregates")]
     [InlineData("")]
     [InlineData("   ")]
     [InlineData(null)]
@@ -201,7 +201,7 @@ public class <Aggregate>Test(<Aggregate>TestFixture fixture)
     }
 
     [Fact(DisplayName = nameof(Add<Relation>))]
-    [Trait("Domain", "<Aggregate> - Aggregate")]
+    [Trait("Domain", "<Aggregate> - Aggregates")]
     public void Add<Relation>()
     {
         var <aggregate> = fixture.GetValid<Aggregate>();

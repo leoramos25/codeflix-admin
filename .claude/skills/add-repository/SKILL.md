@@ -79,9 +79,24 @@ dotnet ef migrations add Create<Aggregate>Table \
   --startup-project src/Codeflix.Catalog.Api
 ```
 
-The design-time connection is `appsettings.json` → MySQL on port 3306 (`database`
-service in `docker-compose.yml`). Do not hand-edit files under `Migrations/` — direct
-edits there are denied by the project settings. The end-to-end suite does not use
+The design-time connection is `CatalogDb` from `appsettings.Development.json` (EF tools
+run the Api in `Development`) → MySQL on port 3306, the `database` service in
+`docker-compose.yml`. `ServerVersion.AutoDetect` connects at design time, so start it
+first (`docker compose up -d database`); with it down every `dotnet ef` command fails with
+`Unable to connect to any of the specified MySQL hosts`. Do not hand-edit files under
+`Migrations/` — direct edits there are denied by the project settings.
+
+Before finishing any persistence change, check that no migration is missing:
+
+```bash
+dotnet ef migrations has-pending-model-changes \
+  --project src/Codeflix.Catalog.Infra.Data.EF --startup-project src/Codeflix.Catalog.Api
+```
+
+Exit 0 means the model matches the last migration. On a non-zero exit read the output:
+`Changes have been made to the model since the last migration` means a migration is
+missing (say so and ask); a connection error means `database` is down, not that the
+model changed. The end-to-end suite does not use
 migrations (it calls `EnsureCreated`), so a green e2e run does not prove the migration
 is correct; check the generated `Up()` by reading it.
 

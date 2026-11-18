@@ -121,7 +121,8 @@ Configurations/
 - The end-to-end environment must point to the `database-e2e` instance; the factory runs
   `EnsureDeleted` on it, so pointing it at the dev database wipes it.
 - **Ports:** the API always runs on 5000-5099 with an explicit `--urls`/`ASPNETCORE_URLS`
-  (see `CLAUDE.md`); `launchSettings.json` is not a source of truth for ports.
+  (see `CLAUDE.md`). The `http`/`https` profiles in `launchSettings.json` stay inside the range
+  (5000/5001), but they are not a source of truth for ports.
 
 ## Testing configuration changes
 
@@ -140,4 +141,3 @@ as the TDD rule requires.
   detail and log the exception.
 - `app.UseAuthorization()` is in the pipeline with no authentication configured — add both
   together when auth arrives, not one without the other.
-- `launchSettings.json` profiles default to port 5208 (outside the allowed range).

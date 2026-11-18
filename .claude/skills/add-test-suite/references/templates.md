@@ -41,8 +41,8 @@ public class <UseCase>Test(<UseCase>TestFixture fixture)
     [Trait("Application", "<UseCase> - Use Cases")]
     public async Task <MethodName>()
     {
-        var unitOfWork = fixture.GetUnitOfWork();
-        var repository = fixture.Get<Aggregate>Repository();
+        var unitOfWork = fixture.GetUnitOfWorkMock();
+        var repository = fixture.Get<Aggregate>RepositoryMock();
         var useCase = new Catalog.Application.UseCases.<Aggregate>.<Verb>.<UseCase>(
             repository.Object,
             unitOfWork.Object

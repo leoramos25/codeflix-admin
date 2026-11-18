@@ -8,6 +8,7 @@
       "Bash(dotnet tool restore)",
       "Bash(dotnet csharpier *)",
       "Bash(dotnet ef migrations list *)",
+      "Bash(dotnet ef migrations has-pending-model-changes *)",
       "Bash(docker compose up -d *)",
       "Bash(docker compose ps *)",
       "Bash(git status *)",

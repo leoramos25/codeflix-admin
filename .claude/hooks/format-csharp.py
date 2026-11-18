@@ -19,6 +19,11 @@ result = subprocess.run(
     text=True,
 )
 if result.returncode != 0:
-    # Non-blocking: surface the formatter error to Claude without failing the edit.
-    print(f"CSharpier failed on {path}:\n{result.stdout}{result.stderr}", file=sys.stderr)
-    sys.exit(1)
+    # Exit 2 feeds stderr back to Claude (the edit itself already happened); exit 1 would
+    # only show it in the user's transcript. Usual cause: `dotnet tool restore` not run.
+    print(
+        f"CSharpier failed on {path} (run `dotnet tool restore` if the tool is missing):\n"
+        f"{result.stdout}{result.stderr}",
+        file=sys.stderr,
+    )
+    sys.exit(2)

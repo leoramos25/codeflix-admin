@@ -94,8 +94,9 @@ dotnet test tests/Codeflix.Catalog.EndToEndTests --filter "FullyQualifiedName~<V
 
 ## 5. Running the API by hand
 
-Only on a port in 5000-5099, always explicit (the `http` launch profile defaults to
-5208, and a hook blocks `dotnet run` without a valid `--urls`):
+Only on a port in 5000-5099, always explicit — if 5000 is taken, use the next free port
+in the range. A hook blocks `dotnet run`/`dotnet watch` unless every `--urls` port is in
+5000-5099:
 
 ```bash
 dotnet run --project src/Codeflix.Catalog.Api --urls "http://localhost:5000"

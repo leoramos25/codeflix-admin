@@ -100,10 +100,14 @@ One behaviour per cycle, unit test first, in
 Unit-test conventions:
 
 - Fixture chain: `Common/BaseFixture` → `<Aggregate>/Common/<Aggregate>UseCaseBaseFixture`
-  (repository mock factories, `GetUnitOfWorkMock()`, `GetValid<Aggregate>()`) →
+  (`Get<Aggregate>RepositoryMock()`, `GetUnitOfWorkMock()`, `GetValid<Aggregate>()`) →
   `<Verb><Aggregate>TestFixture` (collection definition + fixture in the same file).
+  Each mock factory returns a new `Mock<T>` per call; never store a mock in a field.
 - Alias the use-case namespace: `using UseCases = Codeflix.Catalog.Application.UseCases.<Aggregate>.<Verb>;`
-- `[Fact(DisplayName = nameof(Method))]` + `[Trait("Application", "<Verb> <Aggregate> - Use Cases")]`.
+- `[Fact(DisplayName = nameof(Method))]` + `[Trait("Application", "<Verb><Aggregate> - Use Cases")]`
+  — no spaces inside the name (`CreateCastMember - Use Cases`). The spaced values in the
+  Genre and CastMember unit suites (`Create Cast Member - Use Cases`, `Get Genre - Use Case`)
+  and the `Genre` trait name in `CreateGenre`/`UpdateGenre` are outliers.
 - Verify interactions, not just the output: `Insert/Update/Delete ... Times.Once` and
   `unitOfWork.Commit ... Times.Once`; on an error path, `Commit` is `Times.Never`.
 
@@ -125,6 +129,9 @@ end-to-end tests; list them as next steps instead of writing them here.
   new outputs are positional records.
 - **`ListGenresOutput.FillCategoriesWithName`** does a linear search per item; use a
   dictionary keyed by id.
+- **`GenreUseCaseBaseFixture` mock factory names** (`GetGenreRepository()`,
+  `GetCategoryRepository()`, `GetUnitOfWork()`) and `CategoryUseCaseBaseFixture.GetRepositoryMock()`
+  — name new factories `Get<Port>Mock()`.
 - **`CastMemberUseCaseBaseFixture.GetRandomCastMemberType()`** uses `Next(1, 2)`, which
   always returns 1. Upper bound is exclusive — use `Next(1, 3)` or pick from
   `Enum.GetValues<CastMemberType>()`.
